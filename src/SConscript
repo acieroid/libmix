@@ -4,7 +4,8 @@ debug = ARGUMENTS.get('DEBUG', '1')
 cflags = ARGUMENTS.get('CFLAGS', '')
 
 if debug == '1':
-    cflags += '-g'
+    cflags += '-g '
+cflags += '-Iinclude  '
 
 sources = ['list.c', 'color.c']
 libmix = env.SharedLibrary(target = 'mix', source = sources,

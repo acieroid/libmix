@@ -1,5 +1,8 @@
 #include "libmix.h"
 
+#include <stdio.h>
+#include <fcntl.h>
+
 MixerAPIFD mix_open_dev(const char *dev)
 {
   MixerAPIFD fd;
@@ -15,7 +18,7 @@ void mix_close_dev(MixerAPIFD fd)
     perror("close");
 }
 
-List *mix_get_mixers(MixerAPIFD fd)
+MixList *mix_get_mixers(MixerAPIFD fd)
 {
   /* TODO */
   return NULL;

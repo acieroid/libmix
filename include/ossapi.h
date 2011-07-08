@@ -10,7 +10,7 @@
 /**
  * The file descriptor used to communicate with OSS's API
  */
-typedef MixAPIFD int;
+typedef int MixerAPIFD;
 
 #define OSS_CALL(FD, CALL, ARG)                         \
   if (ioctl((FD), (CALL), (ARG)) == -1) {               \

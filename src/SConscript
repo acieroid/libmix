@@ -7,6 +7,6 @@ if debug == '1':
     cflags += '-g '
 cflags += '-Iinclude  '
 
-sources = ['list.c', 'color.c']
+sources = ['list.c', 'color.c', 'libmix.c']
 libmix = env.SharedLibrary(target = 'mix', source = sources,
                            CFLAGS = cflags)

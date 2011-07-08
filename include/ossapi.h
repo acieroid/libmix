@@ -14,7 +14,7 @@ typedef MixAPIFD int;
 
 #define OSS_CALL(FD, CALL, ARG)                         \
   if (ioctl((FD), (CALL), (ARG)) == -1) {               \
-    fprintf(stderr, "Error when calling: %s", (#CALL)); \
+    perror((#CALL));                                    \
   }
 
 #endif /* MIX_OSSAPI_H */

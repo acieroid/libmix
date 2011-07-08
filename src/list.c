@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "list.h"
 
 MixList *mix_list_next(MixList *list)

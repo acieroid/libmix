@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "color.h"
 
 MixColor *mix_color_new(unsigned char red,

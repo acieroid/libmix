@@ -1,7 +1,8 @@
-#include "libmix.h"
-
 #include <stdio.h>
 #include <fcntl.h>
+#include <assert.h>
+
+#include "libmix.h"
 
 MixerAPIFD mix_open_dev(const char *dev)
 {

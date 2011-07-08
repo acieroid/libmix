@@ -30,7 +30,7 @@ MixList *mix_list_prepend(MixList *list, void *data);
 
 /**
  * Free all the element of @p list by calling @p freefunc on the data
- * field of each element of the list, and then calling free(3)
+ * field of each element of the list, and then calling @p free(3)
  */
 void mix_list_free(MixList *list, MixFreeFunc freefunc);
 

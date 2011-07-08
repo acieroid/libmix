@@ -13,9 +13,10 @@
  * (usually a sound card have one mixer)
  */
 typedef struct {
-  char *name;                   /**< The name of this mixer */
-  List *groups;                 /**< Groups contained in this mixer */
-  int card_number;              /**< Number of the sound card of this mixer */
+  MixerAPIFD fd;        /**< File descriptor for communication with OSS */
+  char *name;           /**< The name of this mixer */
+  List *groups;         /**< Groups contained in this mixer */
+  int card_number;      /**< Number of the sound card of this mixer */
 } MixMixer;
 
 /**

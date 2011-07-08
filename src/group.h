@@ -1,3 +1,7 @@
+/**
+ * @file group.h
+ * @brief Implements extension groups
+ */
 #ifndef MIX_GROUP_H
 #define MIX_GROUP_H
 
@@ -7,9 +11,9 @@
  * "potentiometer" associated with it)
  */
 typedef struct {
-  MixMixer *parent_mixer;
-  char *name;
-  List *extensions;
+  MixMixer *parent_mixer;       /**< The mixer that contains this group */
+  char *name;                   /**< The name of this group */
+  List *extensions;             /**< Extensions contained in this group */
 } MixGroup;
 
 

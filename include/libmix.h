@@ -8,8 +8,18 @@
 #include "list.h"
 
 /**
+ * Open the connection with OSS's API
+ */
+MixerAPIFD mix_open_dev(const char *dev);
+
+/**
+ * Close the connection with OSS's API
+ */
+void mix_close_dev(MixerAPIFD fd);
+
+/**
  * @return all the mixers available on the computer
  */
-List *mix_get_mixers();
+List *mix_get_mixers(MixerAPIFD fd);
 
 #endif /* MIX_LIBMIX_H */

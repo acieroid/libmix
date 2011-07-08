@@ -1,0 +1,6 @@
+env = Environment()
+
+cflags = '-g -Iinclude'
+
+open_dev = env.Program('open_dev.c', CFLAGS=cflags, 
+                       LIBS=['mix'], LIBPATH='../src')

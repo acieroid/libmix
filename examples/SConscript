@@ -2,5 +2,8 @@ env = Environment()
 
 cflags = '-g -Iinclude'
 
-open_dev = env.Program('open_dev.c', CFLAGS=cflags, 
-                       LIBS=['mix'], LIBPATH='../src')
+examples = ['open_dev.c', 'list_mixers.c']
+
+for example in examples:
+    env.Program(example, CFLAGS=cflags, LIBS=['mix'], LIBPATH='../src')
+

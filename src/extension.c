@@ -34,8 +34,8 @@ void mix_extension_update_value(MixExtension *extension)
   case MIXT_GROUP: /* already handled in mix_get_mixer */
     break;
   default:
-    fprintf(stderr, "Unknown or not yet handled extension type: %d\n",
-            extension->type);
+    MIX_WARN("Unknown or not yet handled extension type: %d\n",
+             extension->type);
     break;
   }
 }

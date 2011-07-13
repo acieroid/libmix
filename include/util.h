@@ -5,6 +5,9 @@
 #ifndef MIX_UTILS_H
 #define MIX_UTILS_H
 
+#define MIX_WARN(...)                                   \
+  fprintf(stderr, "[libmix] Warning: " __VA_ARGS__)
+
 /**
  * Type representing a function used to free data
  */

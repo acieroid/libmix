@@ -4,7 +4,7 @@
 
 MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
 {
-  MixExtension *extension = malloc(sizeof(extension));
+  MixExtension *extension = malloc(sizeof(*extension));
   assert(extension != NULL);
   
   extension->parent_group = parent;

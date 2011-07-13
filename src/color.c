@@ -6,7 +6,7 @@ MixColor *mix_color_new(unsigned char red,
                         unsigned char green,
                         unsigned char blue)
 {
-  MixColor *color = malloc(sizeof(color));
+  MixColor *color = malloc(sizeof(*color));
   assert(color != NULL);
 
   color->red = red;

@@ -10,6 +10,11 @@
 
 #include "util.h"
 
+#define mix_foreach(iterator, list)              \
+  for ((iterator) = (list); (iterator) != NULL;  \
+       iterator = iterator->next)
+  
+
 /**
  * Simply linked list
  */

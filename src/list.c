@@ -10,7 +10,7 @@ MixList *mix_list_next(MixList *list)
 
 MixList *mix_list_prepend(MixList *list, void *data)
 {
-  MixList *new_list = malloc(sizeof(new_list));;
+  MixList *new_list = malloc(sizeof(*new_list));;
   assert(new_list != NULL);
 
   new_list->data = data;

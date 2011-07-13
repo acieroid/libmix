@@ -38,7 +38,8 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
   oss_mixext mixext;
   int n_ext, i;
 
-  mixer = malloc(sizeof(mixer));
+  mixer = malloc(sizeof(*mixer));
+  assert(mixer != NULL);
   mixer->fd = fd;
 
   /* gather the mixer informations */
@@ -46,7 +47,6 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
   OSS_CALL(fd, SNDCTL_MIXERINFO, &mixerinfo);
   mixer->name = strdup(mixerinfo.name);
   mixer->card_number = mixerinfo.card_number;
-
   /* get all the extensions and extract their informations (groups etc.) */
   n_ext = n;
   OSS_CALL(fd, SNDCTL_MIX_NREXT, &n_ext);
@@ -63,18 +63,18 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
         /* group->extensions = mix_list_reverse(group->extensions); */
         mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
       }
-      group = mix_group_new(mixer, mixext);
+      group = mix_group_new(NULL, mixext);
       break;
     default:
       assert (group != NULL);
       extension = mix_extension_new(group, mixext);
       group->extensions = mix_list_prepend(group->extensions, (void *) extension);
       break;
+      
     }
   }
   
   /* mixer->groups = mix_list_reverse(mixer->groups); */
-
   return mixer;
 }
 

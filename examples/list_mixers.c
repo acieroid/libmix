@@ -20,10 +20,12 @@ int main()
            mix_mixer_get_card_number(mixer));
     mix_foreach(group_iterator, mix_mixer_get_groups(mixer)) {
       group = group_iterator->data;
-      printf("Group %s\n", mix_group_get_name(group));
+      printf("\tGroup %s\n", mix_group_get_name(group));
       mix_foreach(ext_iterator, mix_group_get_extensions(group)) {
         ext = ext_iterator->data;
-        printf("Extension %s\n", mix_extension_get_name(ext));
+        MixColor *color = mix_extension_get_color(ext);
+        printf("\t\tExtension %s\n", mix_extension_get_name(ext));
+        printf("\t\tColor: %d, %d, %d\n", color->red, color->green, color->blue);
       }
     }
   }

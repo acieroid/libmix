@@ -23,7 +23,7 @@ void mix_color_free(MixColor *color)
 
 MixColor *mix_color_new_from_24bit(unsigned int color)
 {
-  return mix_color_new(color & 0xFF,
+  return mix_color_new(color & 0xFF0000 >> 4,
                        color & 0xFF00 >> 2,
-                       color & 0xFF0000 >> 4);
+                       color & 0xFF);
 }

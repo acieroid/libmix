@@ -4,8 +4,6 @@
 #include <string.h>
 
 #include "libmix.h"
-#include "group.h"
-#include "extension.h"
 
 MixerAPIFD mix_open_dev(const char *dev)
 {
@@ -73,7 +71,11 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
       
     }
   }
-  
+  /* add the last group */
+  if (group != NULL) {
+    /* group->extensions = mix_list_reverse(group->extensions); */
+    mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
+  }
   /* mixer->groups = mix_list_reverse(mixer->groups); */
   return mixer;
 }

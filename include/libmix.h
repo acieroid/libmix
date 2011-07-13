@@ -6,6 +6,8 @@
 #define MIX_LIBMIX_H
 
 #include "mixer.h"
+#include "group.h"
+#include "extension.h"
 #include "list.h"
 #include "ossapi.h"
 

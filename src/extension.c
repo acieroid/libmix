@@ -19,31 +19,63 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
   return extension;
 }
 
-void mix_extension_free(MixExtension *extension)
+void mix_extension_free(MixExtension *ext)
 {
-  assert(extension != NULL);
-  if (extension->name != NULL)
-    free(extension->name);
-  free(extension);
+  assert(ext != NULL);
+  if (ext->name != NULL)
+    free(ext->name);
+  if (ext->color != NULL)
+    mix_color_free(ext->color);
+  free(ext);
 }
 
-void mix_extension_update_value(MixExtension *extension)
+void mix_extension_update_value(MixExtension *ext)
 {
   /* TODO */
   oss_mixer_value val;
-  switch (extension->type) {
+  switch (ext->type) {
   case MIXT_DEVROOT: /* already handled in mix_get_mixer */
   case MIXT_GROUP: /* already handled in mix_get_mixer */
     break;
   default:
     MIX_WARN("Unknown or not yet handled extension type: %d\n",
-             extension->type);
+             ext->type);
     break;
   }
 }
 
-char *mix_extension_get_name(MixExtension *extension)
+char *mix_extension_get_name(MixExtension *ext)
 {
-  assert(extension != NULL);
-  return extension->name;
+  assert(ext != NULL);
+  return ext->name;
+}
+
+MixGroup *mix_extension_get_group(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->parent_group;
+}
+
+MixColor *mix_extension_get_color(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->color;
+}
+
+int mix_extension_get_value(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->value;
+}
+
+int mix_extension_get_max_value(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->max_value;
+}
+
+int mix_extension_get_min_value(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->min_value;
 }

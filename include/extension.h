@@ -36,18 +36,45 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext);
 /**
  * Free an extension
  */
-void mix_extension_free(MixExtension *extension);
+void mix_extension_free(MixExtension *ext);
 
 /**
  * Update the value of an extension
  */
-void mix_extension_update_value(MixExtension *extension);
+void mix_extension_update_value(MixExtension *ext);
 
 /**
  * @return the name of this extension
  * @sa mix_mixer_get_name for details about the string returned
  */
-char *mix_extension_get_name(MixExtension *extension);
+char *mix_extension_get_name(MixExtension *ext);
 
+/**
+ * @return a pointer to the parent group of this extension
+ */
+MixGroup *mix_extension_get_group(MixExtension *ext);
+
+/**
+ * @return the color of this mixer. Mixer colors are supported since
+ * OSS 4.1, if the version of OSS on this computer is older, the
+ * default color will be returned.
+ */
+MixColor *mix_extension_get_color(MixExtension *ext);
+
+/**
+ * @return the current value of the mixer
+ */
+int mix_extension_get_value(MixExtension *ext);
+
+/**
+ * @return the maximum value of the mixer
+ */
+int mix_extension_get_max_value(MixExtension *ext);
+
+/**
+ * @return the minimum value of the mixer. See OSS's documentation for
+ * more information about what this minimal value means.
+ */
+int mix_extension_get_min_value(MixExtension *ext);
 
 #endif /* MIX_EXTENSION_H */

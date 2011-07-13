@@ -15,7 +15,7 @@ MixColor *mix_color_new(unsigned char red,
   return color;
 }
 
-void mix_color_delete(MixColor *color)
+void mix_color_free(MixColor *color)
 {
   assert(color != NULL);
   free(color);

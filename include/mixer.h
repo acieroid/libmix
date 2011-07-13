@@ -15,7 +15,7 @@
 typedef struct {
   MixerAPIFD fd;        /**< File descriptor for communication with OSS */
   char *name;           /**< The name of this mixer */
-  List *groups;         /**< Groups contained in this mixer */
+  MixList *groups;      /**< Groups contained in this mixer */
   int card_number;      /**< Number of the sound card of this mixer */
 } MixMixer;
 
@@ -27,7 +27,7 @@ char *mix_mixer_get_name(MixMixer *mixer);
 /**
  * @return a list of all the groups included in that mixer
  */
-List *mix_mixer_get_groups(MixMixer *mixer);
+MixList *mix_mixer_get_groups(MixMixer *mixer);
 
 /**
  * @return The card number of the mixer

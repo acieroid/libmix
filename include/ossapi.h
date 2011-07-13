@@ -6,6 +6,7 @@
 #define MIX_OSSAPI_H
 
 #include <stdio.h>
+#include <sys/soundcard.h>
 
 /**
  * The file descriptor used to communicate with OSS's API

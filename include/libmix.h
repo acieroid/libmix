@@ -5,6 +5,7 @@
 #ifndef MIX_LIBMIX_H
 #define MIX_LIBMIX_H
 
+#include "mixer.h"
 #include "list.h"
 #include "ossapi.h"
 

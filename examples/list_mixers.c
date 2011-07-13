@@ -25,7 +25,7 @@ int main()
         ext = ext_iterator->data;
         MixColor *color = mix_extension_get_color(ext);
         printf("\t\tExtension %s\n", mix_extension_get_name(ext));
-        printf("\t\tColor: %d, %d, %d\n", color->red, color->green, color->blue);
+        printf("\t\t\tColor: %d, %d, %d\n", color->red, color->green, color->blue);
       }
     }
   }

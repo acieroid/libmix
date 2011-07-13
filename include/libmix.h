@@ -28,6 +28,10 @@ int mix_get_number_of_mixers(MixerAPIFD fd);
 
 /**
  * @return the nth mixer (the first mixer is numbered 0)
+ *
+ * @todo don't create groups based on the order of the extensions,
+ * instead look at the parent value of every extension. Also handle
+ * the MIXT_MARKER here.
  */
 MixMixer *mix_get_mixer(MixerAPIFD fd, int n);
 

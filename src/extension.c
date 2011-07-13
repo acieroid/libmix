@@ -31,11 +31,20 @@ void mix_extension_free(MixExtension *ext)
 
 void mix_extension_update_value(MixExtension *ext)
 {
+  oss_mixer_value val;
+  val.dev = ext->id;
   /* TODO */
   oss_mixer_value val;
   switch (ext->type) {
-  case MIXT_DEVROOT: /* already handled in mix_get_mixer */
-  case MIXT_GROUP: /* already handled in mix_get_mixer */
+  case MIXT_DEVROOT:
+  case MIXT_GROUP:
+  case MIXT_MARKER:
+    /* already handled in mix_get_mixer */
+    break;
+  case MIXT_ONOFF: /* 0 -> ON, 1 -> OFF */
+  case MIXT_MUTE:  /* 0 -> Muted, 1 -> Not muted */
+    OSS_CALL(SNDCTL_MIX_READ, val);
+    ext->value = val.value;
     break;
   default:
     MIX_WARN("Unknown or not yet handled extension type: %d\n",

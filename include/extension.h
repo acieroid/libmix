@@ -43,4 +43,11 @@ void mix_extension_free(MixExtension *extension);
  */
 void mix_extension_update_value(MixExtension *extension);
 
+/**
+ * @return the name of this extension
+ * @sa mix_mixer_get_name for details about the string returned
+ */
+char *mix_extension_get_name(MixExtension *extension);
+
+
 #endif /* MIX_EXTENSION_H */

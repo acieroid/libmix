@@ -20,7 +20,14 @@ typedef struct {
 } MixMixer;
 
 /**
- * @return the name of a mixer
+ * Free a mixer object
+ */
+void mix_mixer_free(MixMixer *mixer);
+
+/**
+ * @return the name of a mixer. The string returned is a pointer to the
+ * 'name' field of the group, so it will be freed when mix_group_free
+ * is called.
  */
 char *mix_mixer_get_name(MixMixer *mixer);
 

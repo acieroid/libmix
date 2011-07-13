@@ -15,13 +15,15 @@ int main()
   printf("Number of mixers: %d\n", n);
   mix_foreach(mixer_iterator, mixers) {
     mixer = mixer_iterator->data;
-    printf("Mixer %s on card %d\n", mixer->name, mixer->card_number);
-    mix_foreach(group_iterator, mixer->groups) {
+    printf("Mixer %s on card %d\n",
+           mix_mixer_get_name(mixer),
+           mix_mixer_get_card_number(mixer));
+    mix_foreach(group_iterator, mix_mixer_get_groups(mixer)) {
       group = group_iterator->data;
-      printf("Group %s\n", group->name);
-      mix_foreach(ext_iterator, group->extensions) {
+      printf("Group %s\n", mix_group_get_name(group));
+      mix_foreach(ext_iterator, mix_group_get_extensions(group)) {
         ext = ext_iterator->data;
-        printf("Extension %s\n", ext->name);
+        printf("Extension %s\n", mix_extension_get_name(ext));
       }
     }
   }

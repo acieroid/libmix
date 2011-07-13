@@ -9,7 +9,7 @@ if debug == '1':
 cflags += '-Iinclude -I' + oss_include_dir + ' '
 
 sources = ['list.c', 'color.c',
-           'group.c', 'extension.c',
+           'group.c', 'extension.c', 'mixer.c',
            'libmix.c']
 libmix = env.SharedLibrary(target = 'mix', source = sources,
                            CFLAGS = cflags)

@@ -29,4 +29,20 @@ MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext);
  */
 void mix_group_free(MixGroup *group);
 
+/**
+ * @return the group name.
+ * @sa mix_mixer_get_name for details about the returned string
+ */
+char *mix_group_get_name(MixGroup *group);
+
+/**
+ * @return the list of extensions contained by this group
+ */
+MixList *mix_group_get_extensions(MixGroup *group);
+
+/**
+ * @return a pointer to the parent mixer
+ */
+MixMixer *mix_group_get_mixer(MixGroup *group);
+
 #endif /* MIX_GROUP_H */

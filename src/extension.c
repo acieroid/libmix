@@ -21,7 +21,9 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
 
 void mix_extension_free(MixExtension *extension)
 {
-  free(extension->name);
+  assert(extension != NULL);
+  if (extension->name != NULL)
+    free(extension->name);
   free(extension);
 }
 
@@ -38,4 +40,10 @@ void mix_extension_update_value(MixExtension *extension)
              extension->type);
     break;
   }
+}
+
+char *mix_extension_get_name(MixExtension *extension)
+{
+  assert(extension != NULL);
+  return extension->name;
 }

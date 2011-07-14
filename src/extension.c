@@ -42,11 +42,10 @@ void mix_extension_update_value(MixExtension *ext)
   case MIXT_MARKER:
     /* already handled in mix_get_mixer */
     break;
-#if 0
   case MIXT_ENUM:
     ext->enum_values = malloc(mix_extension_get_max_value(ext)*sizeof(char *));
-    enuminfo.dev = ext->extinfo->dev;
-    enuminfo.ctrl = ext->extinfo->ctrl;
+    enuminfo.dev = ext->mixext.dev;
+    enuminfo.ctrl = ext->mixext.ctrl;
     /* "It is possible that some enum controls don't have any name
        list available. In this case the application should
        automatically generate list of numbers (0 to N-1)." (from OSS
@@ -54,7 +53,7 @@ void mix_extension_update_value(MixExtension *ext)
     if (ioctl(mix_extension_get_fd(ext), SNDCTL_MIX_ENUMINFO, &enuminfo) != -1) {
       for (i = 0; i < mix_extension_get_max_value(ext); i++) {
         /* See http://manuals.opensound.com/developer/SNDCTL_MIX_EXTINFO.html */
-        if (ext->extinfo->enum_present[i/8] & (1 << (i%8))) {
+        if (ext->mixext.enum_present[i/8] & (1 << (i%8))) {
           ext->enum_values[i] = malloc(strlen(enuminfo.strings +
                                               enuminfo.strindex[i]) *
                                        sizeof(char));
@@ -69,7 +68,6 @@ void mix_extension_update_value(MixExtension *ext)
       }
     }
     /* no break because we also want the current value */
-#endif
   case MIXT_ONOFF: /* 0 -> ON, 1 -> OFF */
   case MIXT_MUTE:  /* 0 -> Muted, 1 -> Not muted */
     OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);

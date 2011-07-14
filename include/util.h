@@ -13,4 +13,9 @@
  */
 typedef void (*MixFreeFunc) (void *data);
 
+/**
+ * @return the length of the number passed as argument
+ */
+int mix_number_length(int n);
+
 #endif /* MIX_UTILS_H */

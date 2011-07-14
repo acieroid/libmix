@@ -36,6 +36,7 @@ int main()
     }
   }
 
+  mix_list_free(mixers, (MixFreeFunc) mix_mixer_free);
   mix_close_dev(fd);
   return 0;
 }

@@ -7,8 +7,6 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
   MixExtension *extension = malloc(sizeof(*extension));
   assert(extension != NULL);
 
-  printf("Mixer %s: max: %d, min: %d\n", ext.extname, ext.maxvalue, ext.minvalue);
-  
   extension->parent_group = parent;
   #ifdef OSS_RGB_RED
   extension->color = mix_color_new_from_24bit(ext.rgbcolor);
@@ -22,7 +20,7 @@ void mix_extension_free(MixExtension *ext)
 {
   int i;
   assert(ext != NULL);
-  
+
   if (ext->color != NULL)
     mix_color_free(ext->color);
   if (ext->enum_values != NULL) {
@@ -34,7 +32,7 @@ void mix_extension_free(MixExtension *ext)
   }
   if (ext->enum_values_available != NULL)
     free(ext->enum_values);
-  
+
   free(ext);
 }
 

@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "group.h"
+#include "extension.h"
 
 MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext)
 {
@@ -15,6 +16,7 @@ MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext)
 void mix_group_free(MixGroup *group)
 {
   assert(group != NULL);
+  mix_list_free(group->extensions, (MixFreeFunc) mix_extension_free);
   free(group);
 }
 

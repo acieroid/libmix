@@ -1,8 +1,10 @@
 #include "mixer.h"
+#include "group.h"
 
 void mix_mixer_free(MixMixer *mixer)
 {
   assert(mixer != NULL);
+  mix_list_free(mixer->groups, (MixFreeFunc) mix_group_free);
   free(mixer);
 }
 char *mix_mixer_get_name(MixMixer *mixer)

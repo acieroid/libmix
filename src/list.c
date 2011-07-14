@@ -35,8 +35,6 @@ MixList *mix_list_reverse(MixList *list)
   return new_list;
 }
 
-  
-
 void mix_list_free(MixList *list, MixFreeFunc freefunc)
 {
   MixList *prev, *cur;

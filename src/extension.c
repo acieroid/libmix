@@ -29,7 +29,12 @@ void mix_extension_update_value(MixExtension *ext)
   int i;
   oss_mixer_value val;
   oss_mixer_enuminfo enuminfo;
+  /* The dev, ctrl and timestamp fields must be initialized to the
+     values returned by SNDCTL_MIX_EXTINFO before making the
+     call. (OSS documentation) */
   val.dev = ext->mixext.dev;
+  val.ctrl = ext->mixext.ctrl;
+  val.timestamp = ext->mixext.timestamp;
 
   switch (mix_extension_get_type(ext)) {
   case MIXT_DEVROOT:
@@ -64,12 +69,12 @@ void mix_extension_update_value(MixExtension *ext)
       }
     }
     /* no break because we also want the current value */
+#endif
   case MIXT_ONOFF: /* 0 -> ON, 1 -> OFF */
   case MIXT_MUTE:  /* 0 -> Muted, 1 -> Not muted */
-    OSS_CALL(SNDCTL_MIX_READ, &val, mix_extension_get_fd(ext));
+    OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     ext->value = val.value;
     break;
-#endif
   default:
     MIX_WARN("Unknown or not yet handled extension type: %d\n",
              mix_extension_get_type(ext));
@@ -117,4 +122,16 @@ int mix_extension_get_type(MixExtension *ext)
 {
   assert(ext != NULL);
   return ext->mixext.type;
+}
+
+MixAPIFD mix_extension_get_fd(MixExtension *ext)
+{
+  return mix_group_get_fd(mix_extension_get_group(ext));
+}
+
+char *mix_extension_get_enum_value(MixExtension *ext)
+{
+  assert(ext != NULL);
+  assert(mix_extension_get_type(ext) == MIXT_ENUM);
+  return ext->enum_values[ext->value];
 }

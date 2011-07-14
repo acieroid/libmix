@@ -8,7 +8,7 @@ int main()
   MixGroup *group;
   MixExtension *ext;
   MixList *mixer_iterator, *group_iterator, *ext_iterator;
-  MixerAPIFD fd = mix_open_dev("/dev/mixer");
+  MixAPIFD fd = mix_open_dev("/dev/mixer");
   int n = mix_get_number_of_mixers(fd);
   MixList *mixers = mix_get_mixers(fd);
 
@@ -26,6 +26,7 @@ int main()
         MixColor *color = mix_extension_get_color(ext);
         printf("\t\tExtension %s\n", mix_extension_get_name(ext));
         printf("\t\t\tColor: %d, %d, %d\n", color->red, color->green, color->blue);
+        printf("\t\t\tValue: %d\n", mix_extension_get_value(ext));
       }
     }
   }

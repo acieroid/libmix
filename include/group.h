@@ -45,4 +45,9 @@ MixList *mix_group_get_extensions(MixGroup *group);
  */
 MixMixer *mix_group_get_mixer(MixGroup *group);
 
+/**
+ * @return the file descriptor associated with this group
+ */
+MixAPIFD mix_group_get_fd(MixGroup *group);
+
 #endif /* MIX_GROUP_H */

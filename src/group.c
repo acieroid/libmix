@@ -35,3 +35,8 @@ MixMixer *mix_group_get_mixer(MixGroup *group)
   assert(group != NULL);
   return group->parent_mixer;
 }
+
+MixAPIFD mix_group_get_fd(MixGroup *group)
+{
+  return mix_mixer_get_fd(mix_group_get_mixer(group));
+}

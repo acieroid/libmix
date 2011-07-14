@@ -5,29 +5,29 @@
 
 #include "libmix.h"
 
-MixerAPIFD mix_open_dev(const char *dev)
+MixAPIFD mix_open_dev(const char *dev)
 {
-  MixerAPIFD fd;
+  MixAPIFD fd;
   if ((fd = open(dev, O_RDWR, 0)) == -1)
     perror("open");
   return fd;
 }
 
-void mix_close_dev(MixerAPIFD fd)
+void mix_close_dev(MixAPIFD fd)
 {
   assert(fd != -1);
   if (close(fd) == -1)
     perror("close");
 }
 
-int mix_get_number_of_mixers(MixerAPIFD fd)
+int mix_get_number_of_mixers(MixAPIFD fd)
 {
   int n = 0;
   OSS_CALL(fd, SNDCTL_MIX_NRMIX, &n);
   return n;
 }
 
-MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
+MixMixer *mix_get_mixer(MixAPIFD fd, int n)
 {
   MixMixer *mixer = NULL;
   MixGroup *group = NULL;
@@ -61,14 +61,13 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
         group->extensions = mix_list_reverse(group->extensions);
         mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
       }
-      group = mix_group_new(NULL, mixext);
+      group = mix_group_new(mixer, mixext);
       break;
     default:
       assert (group != NULL);
       extension = mix_extension_new(group, mixext);
       group->extensions = mix_list_prepend(group->extensions, (void *) extension);
       break;
-      
     }
   }
   /* add the last group */
@@ -80,7 +79,7 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
   return mixer;
 }
 
-MixList *mix_get_mixers(MixerAPIFD fd)
+MixList *mix_get_mixers(MixAPIFD fd)
 {
   MixList *result = NULL;
   int i;

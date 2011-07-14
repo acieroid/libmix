@@ -14,17 +14,17 @@
 /**
  * Open the connection with OSS's API
  */
-MixerAPIFD mix_open_dev(const char *dev);
+MixAPIFD mix_open_dev(const char *dev);
 
 /**
  * Close the connection with OSS's API
  */
-void mix_close_dev(MixerAPIFD fd);
+void mix_close_dev(MixAPIFD fd);
 
 /**
  * @return the number of available mixers
  */
-int mix_get_number_of_mixers(MixerAPIFD fd);
+int mix_get_number_of_mixers(MixAPIFD fd);
 
 /**
  * @return the nth mixer (the first mixer is numbered 0)
@@ -33,11 +33,11 @@ int mix_get_number_of_mixers(MixerAPIFD fd);
  * instead look at the parent value of every extension. Also handle
  * the MIXT_MARKER here.
  */
-MixMixer *mix_get_mixer(MixerAPIFD fd, int n);
+MixMixer *mix_get_mixer(MixAPIFD fd, int n);
 
 /**
  * @return all the mixers available on the computer
  */
-MixList *mix_get_mixers(MixerAPIFD fd);
+MixList *mix_get_mixers(MixAPIFD fd);
 
 #endif /* MIX_LIBMIX_H */

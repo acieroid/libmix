@@ -81,4 +81,15 @@ int mix_extension_get_min_value(MixExtension *ext);
  */
 int mix_extension_get_type(MixExtension *ext);
 
+/**
+ * @return the file descriptor of this extension's device
+ */
+MixAPIFD mix_extension_get_fd(MixExtension *ext);
+
+/**
+ * @return the string corresponding to the current value of a
+ * MIXT_ENUM extension
+ */
+char *mix_extension_get_enum_value(MixExtension *ext);
+
 #endif /* MIX_EXTENSION_H */

@@ -48,7 +48,7 @@ void mix_list_free(MixList *list, MixFreeFunc freefunc)
     free(prev);
   }
 
-  freefunc(cur->data);
-  cur->data = NULL;
-  free(cur);
+  freefunc(prev->data);
+  prev->data = NULL;
+  free(prev);
 }

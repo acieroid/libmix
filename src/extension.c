@@ -38,7 +38,7 @@ void mix_extension_free(MixExtension *ext)
 
 void mix_extension_update_value(MixExtension *ext)
 {
-  int i;
+  int i, mask;
   oss_mixer_value val;
   oss_mixer_enuminfo enuminfo;
   /* The dev, ctrl and timestamp fields must be initialized to the
@@ -62,7 +62,7 @@ void mix_extension_update_value(MixExtension *ext)
     enuminfo.ctrl = ext->mixext.ctrl;
     /* "It is possible that some enum controls don't have any name
        list available. In this case the application should
-       automatically generate list of numbers (0 to N-1)." (from OSS
+       automatically generate list of numbers (0 to N-1)." (OSS
        documentation) */
     if (ioctl(mix_extension_get_fd(ext), SNDCTL_MIX_ENUMINFO, &enuminfo) != -1) {
       for (i = 0; i < mix_extension_get_max_value(ext); i++) {
@@ -84,6 +84,26 @@ void mix_extension_update_value(MixExtension *ext)
     /* no break because we also want the current value */
   case MIXT_ONOFF: /* 0 -> ON, 1 -> OFF */
   case MIXT_MUTE:  /* 0 -> Muted, 1 -> Not muted */
+    OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
+    ext->value = val.value;
+    break;
+  case MIXT_MONODB:
+  /* "This mixer control type is not used by OSS drivers any
+     more. Mixer applications can handle it just like
+     MIXT_MONOSLIDER" (OSS documentation) */
+  case MIXT_MONOSLIDER:
+    OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
+    /* "The 8 least significant bits of the value field are used for
+       the volume level (0xVV)" (OSS documentation) */
+    ext->value = val.value & 0xFF;
+    break;
+  case MIXT_MONOSLIDER16:
+    OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
+    /* "The actual value is stored in the lowest 16 bits of the value
+       field (0xVVVV)" (OSS documentation) */
+    ext->value = val.value & 0xFFFF;
+    break;
+  case MIXT_SLIDER:
     OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     ext->value = val.value;
     break;

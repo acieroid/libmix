@@ -16,6 +16,7 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
   extension->mixext = ext;
   extension->enum_values = NULL;
   extension->enum_values_available = NULL;
+  extension->value = 0;
   mix_extension_update_value(extension);
   return extension;
 }

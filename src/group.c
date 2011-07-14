@@ -9,6 +9,7 @@ MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext)
   assert(group != NULL);
   group->parent_mixer = parent;
   group->mixext = ext;
+  group->extensions = NULL;
   return group;
 
 }

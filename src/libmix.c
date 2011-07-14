@@ -58,7 +58,7 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
       break;
     case MIXT_GROUP:
       if (group != NULL) {
-        /* group->extensions = mix_list_reverse(group->extensions); */
+        group->extensions = mix_list_reverse(group->extensions);
         mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
       }
       group = mix_group_new(NULL, mixext);
@@ -73,10 +73,10 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
   }
   /* add the last group */
   if (group != NULL) {
-    /* group->extensions = mix_list_reverse(group->extensions); */
+    group->extensions = mix_list_reverse(group->extensions);
     mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
   }
-  /* mixer->groups = mix_list_reverse(mixer->groups); */
+  mixer->groups = mix_list_reverse(mixer->groups);
   return mixer;
 }
 

@@ -34,6 +34,13 @@ MixList *mix_list_next(MixList *list);
 MixList *mix_list_prepend(MixList *list, void *data);
 
 /**
+ * Reverse a list. It modifies the structure of the list nodes, so
+ * don't rely on @p list anymore, but instead on the returned list.
+ * @return a pointer to the first element of the reversed list
+ */
+MixList *mix_list_reverse(MixList *list);
+
+/**
  * Free all the element of @p list by calling @p freefunc on the data
  * field of each element of the list, and then calling @p free(3)
  */

@@ -36,9 +36,7 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
   oss_mixext mixext;
   int n_ext, i;
 
-  mixer = malloc(sizeof(*mixer));
-  assert(mixer != NULL);
-  mixer->fd = fd;
+  mixer = mix_mixer_new(fd);
 
   /* gather the mixer informations */
   mixerinfo.dev = n;

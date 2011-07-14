@@ -10,8 +10,12 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
   extension->parent_group = parent;
   #ifdef OSS_RGB_RED
   extension->color = mix_color_new_from_24bit(ext.rgbcolor);
+  #else
+  extension->color = mix_color_new_from_24bit(0);
   #endif
   extension->mixext = ext;
+  extension->enum_values = NULL;
+  extension->enum_values_available = NULL;
   mix_extension_update_value(extension);
   return extension;
 }

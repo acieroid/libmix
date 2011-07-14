@@ -1,6 +1,17 @@
 #include "mixer.h"
 #include "group.h"
 
+MixMixer *mix_mixer_new(MixAPIFD fd)
+{
+  MixMixer *mixer = malloc(sizeof(*mixer));
+  assert(mixer != NULL);
+
+  mixer->fd = fd;
+  mixer->groups = NULL;
+
+  return mixer;
+}
+
 void mix_mixer_free(MixMixer *mixer)
 {
   assert(mixer != NULL);

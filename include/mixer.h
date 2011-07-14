@@ -19,6 +19,11 @@ typedef struct {
 } MixMixer;
 
 /**
+ * Allocate and fill a new mixer object
+ */
+MixMixer *mix_mixer_new(MixAPIFD fd);
+
+/**
  * Free a mixer object
  */
 void mix_mixer_free(MixMixer *mixer);

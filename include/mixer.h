@@ -13,10 +13,9 @@
  * (usually a sound card have one mixer)
  */
 typedef struct {
-  MixerAPIFD fd;        /**< File descriptor for communication with OSS */
-  char *name;           /**< The name of this mixer */
-  MixList *groups;      /**< Groups contained in this mixer */
-  int card_number;      /**< Number of the sound card of this mixer */
+  MixerAPIFD fd;                /**< File descriptor for communication with OSS */
+  MixList *groups;              /**< Groups contained in this mixer */
+  oss_mixerinfo mixerinfo;      /**< OSS internal structure for this mixer */
 } MixMixer;
 
 /**

@@ -3,14 +3,12 @@
 void mix_mixer_free(MixMixer *mixer)
 {
   assert(mixer != NULL);
-  if (mixer->name != NULL)
-    free(mixer->name);
   free(mixer);
 }
 char *mix_mixer_get_name(MixMixer *mixer)
 {
   assert(mixer != NULL);
-  return mixer->name;
+  return mixer->mixerinfo.name;
 }
 
 MixList *mix_mixer_get_groups(MixMixer *mixer)
@@ -22,5 +20,5 @@ MixList *mix_mixer_get_groups(MixMixer *mixer)
 int mix_mixer_get_card_number(MixMixer *mixer)
 {
   assert(mixer != NULL);
-  return mixer->card_number;
+  return mixer->mixerinfo.card_number;
 }

@@ -8,13 +8,10 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
   assert(extension != NULL);
   
   extension->parent_group = parent;
-  extension->name = strdup(ext.extname);
   #ifdef OSS_RGB_RED
   extension->color = mix_color_new_from_24bit(ext.rgbcolor);
   #endif
-  extension->type = ext.type;
-  extension->max_value = ext.maxvalue;
-  extension->min_value = ext.minvalue;
+  extension->mixext = ext;
   mix_extension_update_value(extension);
   return extension;
 }
@@ -22,8 +19,6 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
 void mix_extension_free(MixExtension *ext)
 {
   assert(ext != NULL);
-  if (ext->name != NULL)
-    free(ext->name);
   if (ext->color != NULL)
     mix_color_free(ext->color);
   free(ext);
@@ -31,24 +26,53 @@ void mix_extension_free(MixExtension *ext)
 
 void mix_extension_update_value(MixExtension *ext)
 {
+  int i;
   oss_mixer_value val;
-  val.dev = ext->id;
-  /* TODO */
-  oss_mixer_value val;
-  switch (ext->type) {
+  oss_mixer_enuminfo enuminfo;
+  val.dev = ext->mixext.dev;
+
+  switch (mix_extension_get_type(ext)) {
   case MIXT_DEVROOT:
   case MIXT_GROUP:
   case MIXT_MARKER:
     /* already handled in mix_get_mixer */
     break;
+#if 0
+  case MIXT_ENUM:
+    ext->enum_values = malloc(mix_extension_get_max_value(ext)*sizeof(char *));
+    enuminfo.dev = ext->extinfo->dev;
+    enuminfo.ctrl = ext->extinfo->ctrl;
+    /* "It is possible that some enum controls don't have any name
+       list available. In this case the application should
+       automatically generate list of numbers (0 to N-1)." (from OSS
+       documentation) */
+    if (ioctl(mix_extension_get_fd(ext), SNDCTL_MIX_ENUMINFO, &enuminfo) != -1) {
+      for (i = 0; i < mix_extension_get_max_value(ext); i++) {
+        /* See http://manuals.opensound.com/developer/SNDCTL_MIX_EXTINFO.html */
+        if (ext->extinfo->enum_present[i/8] & (1 << (i%8))) {
+          ext->enum_values[i] = malloc(strlen(enuminfo.strings +
+                                              enuminfo.strindex[i]) *
+                                       sizeof(char));
+          strcpy(ext->enum_values[i], enuminfo.strings + enuminfo.strindex[i]);
+        }
+      }
+    }
+    else {
+      for (i = 0; i < mix_extension_get_max_value(ext); i++) {
+        ext->enum_values[i] = malloc(mix_number_length(i)*sizeof(char));
+        sprintf(ext->enum_values[i], "%d", i);
+      }
+    }
+    /* no break because we also want the current value */
   case MIXT_ONOFF: /* 0 -> ON, 1 -> OFF */
   case MIXT_MUTE:  /* 0 -> Muted, 1 -> Not muted */
-    OSS_CALL(SNDCTL_MIX_READ, val);
+    OSS_CALL(SNDCTL_MIX_READ, &val, mix_extension_get_fd(ext));
     ext->value = val.value;
     break;
+#endif
   default:
     MIX_WARN("Unknown or not yet handled extension type: %d\n",
-             ext->type);
+             mix_extension_get_type(ext));
     break;
   }
 }
@@ -56,7 +80,7 @@ void mix_extension_update_value(MixExtension *ext)
 char *mix_extension_get_name(MixExtension *ext)
 {
   assert(ext != NULL);
-  return ext->name;
+  return ext->mixext.extname;
 }
 
 MixGroup *mix_extension_get_group(MixExtension *ext)
@@ -80,11 +104,17 @@ int mix_extension_get_value(MixExtension *ext)
 int mix_extension_get_max_value(MixExtension *ext)
 {
   assert(ext != NULL);
-  return ext->max_value;
+  return ext->mixext.maxvalue;
 }
 
 int mix_extension_get_min_value(MixExtension *ext)
 {
   assert(ext != NULL);
-  return ext->min_value;
+  return ext->mixext.minvalue;
+}
+
+int mix_extension_get_type(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->mixext.type;
 }

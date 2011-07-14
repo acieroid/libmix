@@ -15,8 +15,8 @@
  */
 typedef struct {
   MixMixer *parent_mixer;       /**< The mixer that contains this group */
-  char *name;                   /**< The name of this group */
   MixList *extensions;          /**< Extensions contained in this group */
+  oss_mixext mixext;            /**< OSS internal structure for this group */
 } MixGroup;
 
 /**

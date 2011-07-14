@@ -20,16 +20,15 @@ typedef int MixExtensionType;
  */
 typedef struct {
   MixGroup *parent_group;       /**< The group that contains this extension */
-  char *name;                   /**< The name of this extension */
-  MixExtensionType type;        /**< The type of this extension */
   MixColor *color;              /**< The color of this extension */
-  int value;                    /**< The current value */
-  int max_value;                /**< The maximum possible value */
-  int min_value;                /**< The minimum possible value */
+  int value;                    /**< The current integer value */
+  char **enum_values;           /**< Possible values for a MIXT_ENUM */
+  oss_mixext mixext;            /**< OSS internal structure for this extension */
 } MixExtension;
 
 /**
  * Allocate and fill a new extension
+ * @todo See how OSS internal structure memory is managed
  */
 MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext);
 
@@ -76,5 +75,10 @@ int mix_extension_get_max_value(MixExtension *ext);
  * more information about what this minimal value means.
  */
 int mix_extension_get_min_value(MixExtension *ext);
+
+/**
+ * @return the type of this extension
+ */
+int mix_extension_get_type(MixExtension *ext);
 
 #endif /* MIX_EXTENSION_H */

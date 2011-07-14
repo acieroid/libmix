@@ -7,7 +7,7 @@ MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext)
   MixGroup *group = malloc(sizeof(*group));
   assert(group != NULL);
   group->parent_mixer = parent;
-  group->name = strdup(ext.extname);
+  group->mixext = ext;
   return group;
 
 }
@@ -15,15 +15,13 @@ MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext)
 void mix_group_free(MixGroup *group)
 {
   assert(group != NULL);
-  if (group->name != NULL)
-    free(group->name);
   free(group);
 }
 
 char *mix_group_get_name(MixGroup *group)
 {
   assert(group != NULL);
-  return group->name;
+  return group->mixext.extname;
 }
 
 MixList *mix_group_get_extensions(MixGroup *group)

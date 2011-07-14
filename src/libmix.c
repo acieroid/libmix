@@ -43,8 +43,8 @@ MixMixer *mix_get_mixer(MixerAPIFD fd, int n)
   /* gather the mixer informations */
   mixerinfo.dev = n;
   OSS_CALL(fd, SNDCTL_MIXERINFO, &mixerinfo);
-  mixer->name = strdup(mixerinfo.name);
-  mixer->card_number = mixerinfo.card_number;
+  mixer->mixerinfo = mixerinfo;
+
   /* get all the extensions and extract their informations (groups etc.) */
   n_ext = n;
   OSS_CALL(fd, SNDCTL_MIX_NREXT, &n_ext);

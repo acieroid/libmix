@@ -26,7 +26,12 @@ int main()
         MixColor *color = mix_extension_get_color(ext);
         printf("\t\tExtension %s\n", mix_extension_get_name(ext));
         printf("\t\t\tColor: %d, %d, %d\n", color->red, color->green, color->blue);
-        printf("\t\t\tValue: %d\n", mix_extension_get_value(ext));
+        if (mix_extension_get_type(ext) == MIXT_ENUM) {
+          printf("\t\t\tValue: %s\n", mix_extension_get_enum_value(ext));
+        }
+        else {
+          printf("\t\t\tValue: %d\n", mix_extension_get_value(ext));
+        }
       }
     }
   }

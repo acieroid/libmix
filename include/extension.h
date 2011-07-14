@@ -23,6 +23,7 @@ typedef struct {
   MixColor *color;              /**< The color of this extension */
   int value;                    /**< The current integer value */
   char **enum_values;           /**< Possible values for a MIXT_ENUM */
+  int *enum_values_available;   /**< Which values in enum_values are available now */
   oss_mixext mixext;            /**< OSS internal structure for this extension */
 } MixExtension;
 

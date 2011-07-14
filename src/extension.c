@@ -6,6 +6,8 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
 {
   MixExtension *extension = malloc(sizeof(*extension));
   assert(extension != NULL);
+
+  printf("Mixer %s: max: %d, min: %d\n", ext.extname, ext.maxvalue, ext.minvalue);
   
   extension->parent_group = parent;
   #ifdef OSS_RGB_RED
@@ -18,9 +20,21 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
 
 void mix_extension_free(MixExtension *ext)
 {
+  int i;
   assert(ext != NULL);
+  
   if (ext->color != NULL)
     mix_color_free(ext->color);
+  if (ext->enum_values != NULL) {
+    for (i = 0; i < mix_extension_get_max_value(ext); i++) {
+      if (ext->enum_values[i] != NULL)
+        free(ext->enum_values[i]);
+    }
+    free(ext->enum_values);
+  }
+  if (ext->enum_values_available != NULL)
+    free(ext->enum_values);
+  
   free(ext);
 }
 
@@ -44,6 +58,8 @@ void mix_extension_update_value(MixExtension *ext)
     break;
   case MIXT_ENUM:
     ext->enum_values = malloc(mix_extension_get_max_value(ext)*sizeof(char *));
+    ext->enum_values_available =
+      malloc(mix_extension_get_max_value(ext)*sizeof(int));
     enuminfo.dev = ext->mixext.dev;
     enuminfo.ctrl = ext->mixext.ctrl;
     /* "It is possible that some enum controls don't have any name
@@ -52,19 +68,19 @@ void mix_extension_update_value(MixExtension *ext)
        documentation) */
     if (ioctl(mix_extension_get_fd(ext), SNDCTL_MIX_ENUMINFO, &enuminfo) != -1) {
       for (i = 0; i < mix_extension_get_max_value(ext); i++) {
+        ext->enum_values[i] = malloc((strlen(enuminfo.strings +
+                                             enuminfo.strindex[i])+1) *
+                                     sizeof(char));
+        strcpy(ext->enum_values[i], enuminfo.strings + enuminfo.strindex[i]);
         /* See http://manuals.opensound.com/developer/SNDCTL_MIX_EXTINFO.html */
-        if (ext->mixext.enum_present[i/8] & (1 << (i%8))) {
-          ext->enum_values[i] = malloc(strlen(enuminfo.strings +
-                                              enuminfo.strindex[i]) *
-                                       sizeof(char));
-          strcpy(ext->enum_values[i], enuminfo.strings + enuminfo.strindex[i]);
-        }
+        ext->enum_values_available[i] = ext->mixext.enum_present[i/8] & (1 << (i%8));
       }
     }
     else {
       for (i = 0; i < mix_extension_get_max_value(ext); i++) {
         ext->enum_values[i] = malloc(mix_number_length(i)*sizeof(char));
         sprintf(ext->enum_values[i], "%d", i);
+        ext->enum_values_available[i] = ext->mixext.enum_present[i/8] & (1 << (i%8));
       }
     }
     /* no break because we also want the current value */
@@ -131,5 +147,6 @@ char *mix_extension_get_enum_value(MixExtension *ext)
 {
   assert(ext != NULL);
   assert(mix_extension_get_type(ext) == MIXT_ENUM);
+  //  if (mix_extension_get_value() > mix_extension_get_max_value())
   return ext->enum_values[ext->value];
 }

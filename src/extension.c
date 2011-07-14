@@ -31,7 +31,7 @@ void mix_extension_free(MixExtension *ext)
     free(ext->enum_values);
   }
   if (ext->enum_values_available != NULL)
-    free(ext->enum_values);
+    free(ext->enum_values_available);
 
   free(ext);
 }

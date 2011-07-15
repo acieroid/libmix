@@ -54,6 +54,8 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
     switch (mixext.type) {
     case MIXT_DEVROOT:
       break;
+    case MIXT_MARKER:
+      break;
     case MIXT_GROUP:
       if (group != NULL) {
         group->extensions = mix_list_reverse(group->extensions);

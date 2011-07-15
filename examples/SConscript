@@ -1,6 +1,12 @@
 env = Environment()
 
-cflags = '-g -Iinclude'
+debug = ARGUMENTS.get('DEBUG', '1')
+cflags = ARGUMENTS.get('CFLAGS', '')
+oss_include_dir = ARGUMENTS.get('OSS_INCLUDE_DIR', '/usr/local/lib/oss/include')
+
+if debug == '1':
+    cflags += '-g '
+cflags += '-Iinclude -I' + oss_include_dir + ' '
 
 examples = ['open_dev.c', 'list_mixers.c']
 

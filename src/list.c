@@ -38,7 +38,8 @@ MixList *mix_list_reverse(MixList *list)
 void mix_list_free(MixList *list, MixFreeFunc freefunc)
 {
   MixList *prev, *cur;
-  assert(list != NULL);
+  if (list == NULL)
+    return;
 
   for (prev = list, cur = list->next; cur != NULL;
        prev = cur, cur = cur->next) {

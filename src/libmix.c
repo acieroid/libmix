@@ -61,7 +61,7 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
         group->extensions = mix_list_reverse(group->extensions);
         mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
       }
-      group = mix_group_new(mixer, mixext);
+      group = mix_group_new(mixer, NULL, mixext);
       break;
     default:
       assert (group != NULL);

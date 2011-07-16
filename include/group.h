@@ -13,16 +13,18 @@
  * the same thing (ie. the on/off control for the volume and the
  * "potentiometer" associated with it)
  */
-typedef struct {
-  MixMixer *parent_mixer;       /**< The mixer that contains this group */
-  MixList *extensions;          /**< Extensions contained in this group */
-  oss_mixext mixext;            /**< OSS internal structure for this group */
+typedef struct MixGroup {
+  MixMixer *parent_mixer;        /**< The mixer that contains this group */
+  struct MixGroup *parent_group; /**< The group that contains this group (if there is) */
+  MixList *groups;               /**< Groups contained in this group */
+  MixList *extensions;           /**< Extensions contained in this group */
+  oss_mixext mixext;             /**< OSS internal structure for this group */
 } MixGroup;
 
 /**
  * Allocate and fill a new group
  */
-MixGroup *mix_group_new(MixMixer *parent, oss_mixext ext);
+MixGroup *mix_group_new(MixMixer *parent, MixGroup *parent_group, oss_mixext ext);
 
 /**
  * Free a group

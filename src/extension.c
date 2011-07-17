@@ -101,6 +101,7 @@ void mix_extension_update_value(MixExtension *ext)
      more. Mixer applications can handle it just like
      MIXT_MONOSLIDER" (OSS documentation) */
   case MIXT_MONOSLIDER:
+  case MIXT_MONOPEAK:
     OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     /* "The 8 least significant bits of the value field are used for
        the volume level (0xVV)" (OSS documentation) */
@@ -113,6 +114,7 @@ void mix_extension_update_value(MixExtension *ext)
     /* "The left channel level is stored in the lowest 8 bits of the
        value field and the right channel level is stored in the next 8
        bit byte (0xRRLL)." (OSS documentation) */
+  case MIXT_STEREOPEAK:
     OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     ext->value = val.value & 0xFFFF; /* In both case we want these four bytes */
     break;

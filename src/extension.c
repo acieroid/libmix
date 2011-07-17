@@ -2,12 +2,14 @@
 
 #include "extension.h"
 
-MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
+MixExtension *mix_extension_new(oss_mixext ext)
 {
+  MIX_DBG("Creating extension %s", ext.extname);
   MixExtension *extension = malloc(sizeof(*extension));
   assert(extension != NULL);
 
-  extension->parent_group = parent;
+  extension->parent_group = NULL;
+  extension->parent_mixer = NULL;
   #ifdef OSS_RGB_RED
   extension->color = mix_color_new_from_24bit(ext.rgbcolor);
   #else
@@ -17,12 +19,12 @@ MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext)
   extension->enum_values = NULL;
   extension->enum_values_available = NULL;
   extension->value = 0;
-  mix_extension_update_value(extension);
   return extension;
 }
 
 void mix_extension_free(MixExtension *ext)
 {
+  MIX_DBG("Freeing extension %s", mix_extension_get_name(ext));
   int i;
   assert(ext != NULL);
 
@@ -43,6 +45,8 @@ void mix_extension_free(MixExtension *ext)
 
 void mix_extension_update_value(MixExtension *ext)
 {
+  MIX_DBG("Extension %s: updating value",
+          mix_extension_get_name(ext));
   int i, mask;
   oss_mixer_value val;
   oss_mixer_enuminfo enuminfo;
@@ -113,7 +117,7 @@ void mix_extension_update_value(MixExtension *ext)
     ext->value = val.value;
     break;
   default:
-    MIX_WARN("Unknown or not yet handled extension type: %d\n",
+    MIX_WARN("Unknown or not yet handled extension type: %d",
              mix_extension_get_type(ext));
     break;
   }
@@ -129,6 +133,12 @@ MixGroup *mix_extension_get_group(MixExtension *ext)
 {
   assert(ext != NULL);
   return ext->parent_group;
+}
+
+MixMixer *mix_extension_get_mixer(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->parent_mixer;
 }
 
 MixColor *mix_extension_get_color(MixExtension *ext)
@@ -163,7 +173,13 @@ int mix_extension_get_type(MixExtension *ext)
 
 MixAPIFD mix_extension_get_fd(MixExtension *ext)
 {
-  return mix_group_get_fd(mix_extension_get_group(ext));
+  MixMixer *parent_mixer = mix_extension_get_mixer(ext);
+  MixGroup *parent_group = mix_extension_get_group(ext);
+  assert(parent_group != NULL || parent_mixer != NULL);
+  if (parent_mixer != NULL)
+    return mix_mixer_get_fd(parent_mixer);
+  else
+    return mix_group_get_fd(parent_group);
 }
 
 char *mix_extension_get_enum_value(MixExtension *ext)
@@ -172,4 +188,20 @@ char *mix_extension_get_enum_value(MixExtension *ext)
   assert(mix_extension_get_type(ext) == MIXT_ENUM);
   //  if (mix_extension_get_value() > mix_extension_get_max_value())
   return ext->enum_values[ext->value];
+}
+
+void mix_extension_set_parent_mixer(MixExtension *ext, MixMixer *mixer)
+{
+  MIX_DBG("Extension %s: setting parent mixer %s",
+          mix_extension_get_name(ext), mix_mixer_get_name(mixer));
+  assert(ext != NULL);
+  ext->parent_mixer = mixer;
+}
+
+void mix_extension_set_parent_group(MixExtension *ext, MixGroup *group)
+{
+  MIX_DBG("Extension %s: setting parent group %s",
+          mix_extension_get_name(ext), mix_group_get_name(group));
+  assert(ext != NULL);
+  ext->parent_group = group;
 }

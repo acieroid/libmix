@@ -7,17 +7,7 @@
 
 #include "list.h"
 #include "ossapi.h"
-
-/**
- * A mixer correspond to a set of control of the same sound cards
- * (usually a sound card have one mixer)
- */
-typedef struct {
-  MixAPIFD fd;                /**< File descriptor for communication with OSS */
-  MixList *groups;              /**< Groups contained in this mixer */
-  oss_mixerinfo mixerinfo;      /**< OSS internal structure for this mixer */
-} MixMixer;
-
+#include "datastructures.h"
 /**
  * Allocate and fill a new mixer object
  */
@@ -49,5 +39,32 @@ int mix_mixer_get_card_number(MixMixer *mixer);
  * @return the file descriptor associated with this mixer
  */
 MixAPIFD mix_mixer_get_fd(MixMixer *mixer);
+
+/**
+ * Function to call when all groups and extensions have been added. It
+ * takes care of reversing them to have them in order.
+ */
+void mix_mixer_finish_add(MixMixer *mixer);
+
+/**
+ * Add a child group to this mixer
+ */
+void mix_mixer_add_child_group(MixMixer *mixer, MixGroup *group);
+
+/**
+ * Add a child extension to this mixer
+ */
+void mix_mixer_add_child_extension(MixMixer *mixer, MixExtension *ext);
+
+/**
+ * Set the parent mixer of this extension
+ */
+void mix_extension_set_parent_mixer(MixExtension *ext, MixMixer *mixer);
+
+/**
+ * Set the parent group of this extension
+ */
+void mix_extension_set_parent_group(MixExtension *ext, MixGroup *group);
+  
 
 #endif /* MIX_MIXER_H */

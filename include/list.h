@@ -46,4 +46,9 @@ MixList *mix_list_reverse(MixList *list);
  */
 void mix_list_free(MixList *list, MixFreeFunc freefunc);
 
+/**
+ * Iterate a function over all the elements of a list
+ */
+void mix_list_iter(MixList *list, MixIterFunc iterfunc);
+
 #endif /* MIX_LIST_H */

@@ -53,3 +53,11 @@ void mix_list_free(MixList *list, MixFreeFunc freefunc)
   prev->data = NULL;
   free(prev);
 }
+
+void mix_list_iter(MixList *list, MixIterFunc iterfunc)
+{
+  MixList *iterator;
+  mix_foreach(iterator, list) {
+    iterfunc(iterator->data);
+  }
+}

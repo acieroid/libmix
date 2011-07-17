@@ -5,9 +5,8 @@
 #ifndef MIX_EXTENSION_H
 #define MIX_EXTENSION_H
 
-#include "group.h"
-#include "color.h"
 #include "ossapi.h"
+#include "datastructures.h"
 
 /**
  * Type of an extension. Values are the same as OSS's MIXT_* defines
@@ -15,23 +14,10 @@
 typedef int MixExtensionType;
 
 /**
- * An extension correspond to some "movable" or "chosable" control,
- * ie. a on/off control, a "potentiometer" control, etc.
- */
-typedef struct {
-  MixGroup *parent_group;       /**< The group that contains this extension */
-  MixColor *color;              /**< The color of this extension */
-  int value;                    /**< The current integer value */
-  char **enum_values;           /**< Possible values for a MIXT_ENUM */
-  int *enum_values_available;   /**< Which values in enum_values are available now */
-  oss_mixext mixext;            /**< OSS internal structure for this extension */
-} MixExtension;
-
-/**
  * Allocate and fill a new extension
  * @todo See how OSS internal structure memory is managed
  */
-MixExtension *mix_extension_new(MixGroup *parent, oss_mixext ext);
+MixExtension *mix_extension_new(oss_mixext ext);
 
 /**
  * Free an extension

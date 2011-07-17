@@ -5,16 +5,8 @@
 #ifndef MIX_COLOR_H
 #define MIX_COLOR_H
 
+#include "datastructures.h"
 #include <stdlib.h>
-
-/**
- * Simply a RGB color
- */
-typedef struct {
-  unsigned char red;            /**< The red value of the color */
-  unsigned char green;          /**< The green value */
-  unsigned char blue;           /**< The blue value */
-} MixColor;
 
 /**
  * Allocate data for a new color and fill its members

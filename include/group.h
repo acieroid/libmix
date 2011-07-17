@@ -5,26 +5,13 @@
 #ifndef MIX_GROUP_H
 #define MIX_GROUP_H
 
-#include "mixer.h"
+#include "datastructures.h"
 #include "ossapi.h"
-
-/**
- * A group contains multiple extensions of the same kind, that acts on
- * the same thing (ie. the on/off control for the volume and the
- * "potentiometer" associated with it)
- */
-typedef struct MixGroup {
-  MixMixer *parent_mixer;        /**< The mixer that contains this group */
-  struct MixGroup *parent_group; /**< The group that contains this group (if there is) */
-  MixList *groups;               /**< Groups contained in this group */
-  MixList *extensions;           /**< Extensions contained in this group */
-  oss_mixext mixext;             /**< OSS internal structure for this group */
-} MixGroup;
 
 /**
  * Allocate and fill a new group
  */
-MixGroup *mix_group_new(MixMixer *parent, MixGroup *parent_group, oss_mixext ext);
+MixGroup *mix_group_new(oss_mixext ext);
 
 /**
  * Free a group
@@ -51,5 +38,32 @@ MixMixer *mix_group_get_mixer(MixGroup *group);
  * @return the file descriptor associated with this group
  */
 MixAPIFD mix_group_get_fd(MixGroup *group);
+
+/**
+ * @sa mix_mixer_finish_add
+ */
+void mix_group_finish_add(MixGroup *group);
+
+/**
+ * Add a child group to this group
+ * @sa mix_mixer_add_child_group
+ */
+void mix_group_add_child_group(MixGroup *parent, MixGroup *group);
+
+/**
+ * Add a child extension to this group
+ * @sa mix_mixer_add_child_extension
+ */
+void mix_group_add_child_extension(MixGroup *group, MixExtension *ext);
+
+/**
+ * Set the parent mixer of this group
+ */
+void mix_group_set_parent_mixer(MixGroup *group, MixMixer *mixer);
+
+/**
+ * Set the parent group of this group
+ */
+void mix_group_set_parent_group(MixGroup *group, MixGroup *parent);
 
 #endif /* MIX_GROUP_H */

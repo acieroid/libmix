@@ -31,6 +31,7 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
 {
   MixMixer *mixer = NULL;
   MixGroup *group = NULL;
+  MixGroup **groups = NULL;
   MixExtension *extension = NULL;
   oss_mixerinfo mixerinfo;
   oss_mixext mixext;
@@ -45,8 +46,13 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
 
   /* get all the extensions and extract their informations (groups etc.) */
   n_ext = n;
+
   OSS_CALL(fd, SNDCTL_MIX_NREXT, &n_ext);
+  groups = malloc(n_ext*sizeof(*groups));
+
   for (i = 0; i < n_ext; i++) {
+    groups[i] = NULL;
+
     mixext.dev = n;
     mixext.ctrl = i;
     OSS_CALL(fd, SNDCTL_MIX_EXTINFO, &mixext);
@@ -55,27 +61,29 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
     case MIXT_DEVROOT:
       break;
     case MIXT_MARKER:
+      /* start of the extension section, but we don't care distinguish
+         it from the normal section*/
       break;
     case MIXT_GROUP:
-      if (group != NULL) {
-        group->extensions = mix_list_reverse(group->extensions);
-        mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
-      }
-      group = mix_group_new(mixer, NULL, mixext);
+      group = mix_group_new(mixext);
+      groups[i] = group;
+      if (groups[mixext.parent] == NULL) /* parent is the mixer */
+        mix_mixer_add_child_group(mixer, group);
+      else
+        mix_group_add_child_group(groups[mixext.parent], group);
       break;
     default:
-      assert (group != NULL);
-      extension = mix_extension_new(group, mixext);
-      group->extensions = mix_list_prepend(group->extensions, (void *) extension);
+      extension = mix_extension_new(mixext);
+      if (groups[mixext.parent] == NULL)
+        /* parent can also be the mixer for extensions */
+        mix_mixer_add_child_extension(mixer, extension);
+      else
+        mix_group_add_child_extension(groups[mixext.parent], extension);
       break;
     }
   }
-  /* add the last group */
-  if (group != NULL) {
-    group->extensions = mix_list_reverse(group->extensions);
-    mixer->groups = mix_list_prepend(mixer->groups, (void *) group);
-  }
-  mixer->groups = mix_list_reverse(mixer->groups);
+
+  mix_mixer_finish_add(mixer);
   return mixer;
 }
 

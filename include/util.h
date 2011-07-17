@@ -6,12 +6,21 @@
 #define MIX_UTILS_H
 
 #define MIX_WARN(...)                                   \
-  fprintf(stderr, "[libmix] Warning: " __VA_ARGS__)
+  fprintf(stderr, "[libmix] Warning: " __VA_ARGS__);    \
+  fprintf(stderr, "\n");
+#define MIX_DBG(...)                                    \
+  fprintf(stderr, "[libmix] Debug: " __VA_ARGS__);      \
+  fprintf(stderr, "\n");
 
 /**
- * Type representing a function used to free data
+ * A function used to free data
  */
 typedef void (*MixFreeFunc) (void *data);
+
+/**
+ * A function meant to be iterated over something
+ */
+typedef void (*MixIterFunc) (void *data);
 
 /**
  * @return the length of the number passed as argument

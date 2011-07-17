@@ -15,7 +15,6 @@ typedef int MixExtensionType;
 
 /**
  * Allocate and fill a new extension
- * @todo See how OSS internal structure memory is managed
  */
 MixExtension *mix_extension_new(oss_mixext ext);
 

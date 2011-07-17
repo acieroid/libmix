@@ -10,6 +10,7 @@ MixMixer *mix_mixer_new(MixAPIFD fd)
 
   mixer->fd = fd;
   mixer->groups = NULL;
+  mixer->extensions = NULL;
 
   return mixer;
 }

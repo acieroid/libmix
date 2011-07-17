@@ -12,8 +12,8 @@ MixGroup *mix_group_new(oss_mixext ext)
   group->parent_group = NULL;
   group->mixext = ext;
   group->extensions = NULL;
+  group->groups = NULL;
   return group;
-
 }
 
 void mix_group_free(MixGroup *group)

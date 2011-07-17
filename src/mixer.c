@@ -33,6 +33,12 @@ MixList *mix_mixer_get_groups(MixMixer *mixer)
   return mixer->groups;
 }
 
+MixList *mix_mixer_get_extensions(MixMixer *mixer)
+{
+  assert(mixer != NULL);
+  return mixer->extensions;
+}
+
 int mix_mixer_get_card_number(MixMixer *mixer)
 {
   assert(mixer != NULL);

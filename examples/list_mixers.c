@@ -1,6 +1,61 @@
 #include <libmix.h>
 #include <stdio.h>
 
+void indent(int indentation_level)
+{
+  if (indentation_level > 0) {
+    printf("\t");
+    indent(indentation_level-1);
+  }
+}
+
+void extension_print(MixExtension *ext, int indent_level)
+{
+  MixColor *color = mix_extension_get_color(ext);
+  indent(indent_level);
+  printf("Extension %s\n", mix_extension_get_name(ext));
+  indent(indent_level+1);
+  printf("Color: %d, %d, %d\n", color->red, color->green, color->blue);
+  indent(indent_level+1);
+  if (mix_extension_get_type(ext) == MIXT_ENUM) {
+    printf("Value: %s\n", mix_extension_get_enum_value(ext));
+  }
+  else {
+    printf("Value: %d\n", mix_extension_get_value(ext));
+  }
+}
+
+void group_print(MixGroup *group, int indentation_level)
+{
+  MixList *iterator;
+
+  indent(indentation_level);
+  printf("Group %s\n", mix_group_get_name(group));
+
+  mix_foreach(iterator, mix_group_get_groups(group)) {
+    group_print(iterator->data, indentation_level+1);
+  }
+  mix_foreach(iterator, mix_group_get_extensions(group)) {
+    extension_print(iterator->data, indentation_level+1);
+  }
+}
+
+void mixer_print_extensions(MixMixer *mixer)
+{
+  MixList *iterator;
+  mix_foreach(iterator, mix_mixer_get_extensions(mixer)) {
+    extension_print(iterator->data, 1);
+  }
+}
+
+void mixer_print_groups(MixMixer *mixer)
+{
+  MixList *iterator;
+  mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
+    group_print(iterator->data, 1);
+  }
+}
+
 int main()
 {
   int i;
@@ -18,22 +73,8 @@ int main()
     printf("Mixer %s on card %d\n",
            mix_mixer_get_name(mixer),
            mix_mixer_get_card_number(mixer));
-    mix_foreach(group_iterator, mix_mixer_get_groups(mixer)) {
-      group = group_iterator->data;
-      printf("\tGroup %s\n", mix_group_get_name(group));
-      mix_foreach(ext_iterator, mix_group_get_extensions(group)) {
-        ext = ext_iterator->data;
-        MixColor *color = mix_extension_get_color(ext);
-        printf("\t\tExtension %s\n", mix_extension_get_name(ext));
-        printf("\t\t\tColor: %d, %d, %d\n", color->red, color->green, color->blue);
-        if (mix_extension_get_type(ext) == MIXT_ENUM) {
-          printf("\t\t\tValue: %s\n", mix_extension_get_enum_value(ext));
-        }
-        else {
-          printf("\t\t\tValue: %d\n", mix_extension_get_value(ext));
-        }
-      }
-    }
+    mixer_print_extensions(mixer);
+    mixer_print_groups(mixer);
   }
 
   mix_list_free(mixers, (MixFreeFunc) mix_mixer_free);

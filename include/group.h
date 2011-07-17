@@ -25,6 +25,11 @@ void mix_group_free(MixGroup *group);
 char *mix_group_get_name(MixGroup *group);
 
 /**
+ * @return the list of groups contained by this group
+ */
+MixList *mix_group_get_groups(MixGroup *group);
+
+/**
  * @return the list of extensions contained by this group
  */
 MixList *mix_group_get_extensions(MixGroup *group);

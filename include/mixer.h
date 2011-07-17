@@ -31,6 +31,11 @@ char *mix_mixer_get_name(MixMixer *mixer);
 MixList *mix_mixer_get_groups(MixMixer *mixer);
 
 /**
+ * @return a list of all the extensions included in that mixer
+ */
+MixList *mix_mixer_get_extensions(MixMixer *mixer);
+
+/**
  * @return the card number of the mixer
  */
 int mix_mixer_get_card_number(MixMixer *mixer);

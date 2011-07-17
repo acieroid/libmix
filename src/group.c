@@ -31,6 +31,12 @@ char *mix_group_get_name(MixGroup *group)
   return group->mixext.extname;
 }
 
+MixList *mix_group_get_groups(MixGroup *group)
+{
+  assert(group != NULL);
+  return group->groups;
+}
+
 MixList *mix_group_get_extensions(MixGroup *group)
 {
   assert(group != NULL);

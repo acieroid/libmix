@@ -20,6 +20,7 @@ void mix_mixer_free(MixMixer *mixer)
   MIX_DBG("Freeing mixer %s", mix_mixer_get_name(mixer));
   assert(mixer != NULL);
   mix_list_free(mixer->groups, (MixFreeFunc) mix_group_free);
+  mix_list_free(mixer->extensions, (MixFreeFunc) mix_extension_free);
   free(mixer);
 }
 char *mix_mixer_get_name(MixMixer *mixer)

@@ -84,6 +84,7 @@ MixMixer *mix_get_mixer(MixAPIFD fd, int n)
   }
 
   mix_mixer_finish_add(mixer);
+  free(groups);
   return mixer;
 }
 

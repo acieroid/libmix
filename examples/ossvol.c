@@ -1,12 +1,19 @@
 /**
  * Rewrite of Daniel J Griffiths's ossvol
  * (http://ghost1227.com/ossvol)
+ *
+ * The duo VOLSTORE/MUTSTORE is replaced by only a "mute store" that
+ * contains the volume when we mute it
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include <libmix.h>
 
-static const char channel[] = "vmix0-outvol";
+#define OSS_DEVICE "/dev/mixer"
+#define CHANNEL "vmix0-outvol"
+#define MUTSTORE "/tmp/volume"
 
 void print_usage()
 {
@@ -19,14 +26,54 @@ void print_usage()
   exit(0);
 }
 
+int mute_store_exists()
+{
+  FILE *f = fopen(MUTSTORE, "r");
+  if (f == NULL)
+    return 0;
+  fclose(f);
+  return 1;
+}
+
+int mute_store_get_and_rm()
+{
+  int value = 0;
+  char str[16];
+  /* open the file */
+  FILE *f = fopen(MUTSTORE, "r");
+  if (f == NULL) {
+    perror("fopen");
+    exit(1);
+  }
+  /* read the value */
+  fscanf(f, "%d", &value);
+  /* close the file */
+  fclose(f);
+  /* and delete the file */
+  unlink(MUTSTORE);
+
+  return value;
+}
+
+void mute_store_save(int value)
+{
+  FILE *f = fopen(MUTSTORE, "w");
+  if (f == NULL) {
+    perror("fopen");
+    exit(1);
+  }
+  fprintf(f, "%d", value);
+  fclose(f);
+}
+
 void increase(int step)
 {
   /* open the device */
-  MixAPIFD fd = mix_open_dev("/dev/mixer");
+  MixAPIFD fd = mix_open_dev(OSS_DEVICE);
   /* get the first (and usually the only) mixer */
   MixMixer *mixer = mix_get_mixer(fd, 0);
   /* find the extension we want to change */
-  MixExtension *ext = mix_mixer_find_extension(mixer, channel);
+  MixExtension *ext = mix_mixer_find_extension(mixer, CHANNEL);
   /* change its value */
   mix_extension_set_value(ext, mix_extension_get_value(ext) + step);
   /* free the mixer */
@@ -42,7 +89,22 @@ void decrease(int n)
 
 void toggle()
 {
-  printf("TODO\n");
+  MixAPIFD fd;
+  MixMixer *mixer;
+  MixExtension *ext;
+  if (mute_store_exists() == 1) {
+    /* if it is muted, then the actual value is 0 */
+    increase(mute_store_get_and_rm());
+  }
+  else {
+    fd = mix_open_dev(OSS_DEVICE);
+    mixer = mix_get_mixer(fd, 0);
+    ext = mix_mixer_find_extension(mixer, CHANNEL);
+    mute_store_save(mix_extension_get_value(ext));
+    mix_extension_set_value(ext, 0);
+    mix_mixer_free(mixer);
+    mix_close_dev(fd);
+  }
 }
 
 int main(int argc, char *argv[])

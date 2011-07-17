@@ -113,12 +113,13 @@ void mix_extension_update_value(MixExtension *ext)
     ext->value = val.value & 0xFFFF;
     break;
   case MIXT_SLIDER:
+  case MIXT_VALUE:
     OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     ext->value = val.value;
     break;
   default:
-    MIX_WARN("Unknown or not yet handled extension type: %d",
-             mix_extension_get_type(ext));
+    MIX_WARN("Unknown or not yet handled extension type: %d for extension %s",
+             mix_extension_get_type(ext), mix_extension_get_name(ext));
     break;
   }
 }

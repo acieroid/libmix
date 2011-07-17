@@ -17,8 +17,17 @@ void extension_print(MixExtension *ext, int indent_level)
   indent(indent_level+1);
   printf("Color: %d, %d, %d\n", color->red, color->green, color->blue);
   indent(indent_level+1);
-  if (mix_extension_get_type(ext) == MIXT_ENUM) {
+  printf("Min value: %d\n", mix_extension_get_min_value(ext));
+  indent(indent_level+1);
+  printf("Max value: %d\n", mix_extension_get_max_value(ext));
+  indent(indent_level+1);
+  if (mix_extension_is_enum(ext)) {
     printf("Value: %s\n", mix_extension_get_enum_value(ext));
+  }
+  else if (mix_extension_is_stereo(ext)) {
+    printf("Left value: %d\n", mix_extension_get_left_value(ext));
+    indent(indent_level+1);
+    printf("Right value: %d\n", mix_extension_get_right_value(ext));
   }
   else {
     printf("Value: %d\n", mix_extension_get_value(ext));

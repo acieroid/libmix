@@ -107,13 +107,18 @@ void mix_extension_update_value(MixExtension *ext)
     ext->value = val.value & 0xFF;
     break;
   case MIXT_MONOSLIDER16:
-    OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     /* "The actual value is stored in the lowest 16 bits of the value
        field (0xVVVV)" (OSS documentation) */
-    ext->value = val.value & 0xFFFF;
+  case MIXT_STEREOSLIDER:
+    /* "The left channel level is stored in the lowest 8 bits of the
+       value field and the right channel level is stored in the next 8
+       bit byte (0xRRLL)." (OSS documentation) */
+    OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
+    ext->value = val.value & 0xFFFF; /* In both case we want these four bytes */
     break;
   case MIXT_SLIDER:
   case MIXT_VALUE:
+  case MIXT_STEREOSLIDER16:
     OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_READ, &val);
     ext->value = val.value;
     break;
@@ -152,6 +157,41 @@ int mix_extension_get_value(MixExtension *ext)
 {
   assert(ext != NULL);
   return ext->value;
+}
+
+int mix_extension_get_left_value(MixExtension *ext)
+{
+  int mask;
+  switch (mix_extension_get_type(ext)) {
+  case MIXT_STEREOSLIDER: /* 0xRRLL */
+    mask = 0x00FF;
+    break;
+  case MIXT_STEREOSLIDER16: /* 0xRRRRLLLL */
+    mask = 0x0000FFFF;
+    break;
+  default:
+    MIX_WARN("Extension %s isn't stereo", mix_extension_get_name(ext));
+    mask = ~0; /* We simply return its raw value */
+    break;
+  }
+  return mix_extension_get_value(ext) & mask;
+}
+
+int mix_extension_get_right_value(MixExtension *ext)
+{
+  int mask;
+  switch (mix_extension_get_type(ext)) {
+  case MIXT_STEREOSLIDER: /* 0xRRLL */
+    mask = 0xFF00 >> 8;
+    break;
+  case MIXT_STEREOSLIDER16: /* 0xRRRRLLLL */
+    mask = 0xFFFF0000 >> 16;
+    break;
+  default:
+    MIX_WARN("Extension %s isn't stereo", mix_extension_get_name(ext));
+    mask = ~0; /* We simply return its raw value */
+  }
+  return mix_extension_get_value(ext) & mask;
 }
 
 int mix_extension_get_max_value(MixExtension *ext)
@@ -205,4 +245,20 @@ void mix_extension_set_parent_group(MixExtension *ext, MixGroup *group)
           mix_extension_get_name(ext), mix_group_get_name(group));
   assert(ext != NULL);
   ext->parent_group = group;
+}
+
+int mix_extension_is_enum(MixExtension *ext)
+{
+  return mix_extension_get_type(ext) == MIXT_ENUM;
+}
+
+int mix_extension_is_stereo(MixExtension *ext)
+{
+  switch (mix_extension_get_type(ext)) {
+  case MIXT_STEREOSLIDER:
+  case MIXT_STEREOSLIDER16:
+    return 1;
+  default:
+    return 0;
+  }
 }

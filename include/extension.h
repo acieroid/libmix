@@ -48,9 +48,19 @@ MixGroup *mix_extension_get_group(MixExtension *ext);
 MixColor *mix_extension_get_color(MixExtension *ext);
 
 /**
- * @return the current value of the mixer
+ * @return the current value of this extension
  */
 int mix_extension_get_value(MixExtension *ext);
+
+/**
+ * @return the left value of this extension
+ */
+int mix_extension_get_left_value(MixExtension *ext);
+
+/**
+ * @return the right value of this extension
+ */
+int mix_extension_get_right_value(MixExtension *ext);
 
 /**
  * @return the maximum value of the mixer
@@ -78,5 +88,15 @@ MixAPIFD mix_extension_get_fd(MixExtension *ext);
  * MIXT_ENUM extension
  */
 char *mix_extension_get_enum_value(MixExtension *ext);
+
+/**
+ * @return 1 if this extension is an enum (MIXT_ENUM)
+ */
+int mix_extension_is_enum(MixExtension *ext);
+
+/**
+ * @return 1 if this extension's values are stereo
+ */
+int mix_extension_is_stereo(MixExtension *ext);
 
 #endif /* MIX_EXTENSION_H */

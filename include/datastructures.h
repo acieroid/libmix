@@ -1,3 +1,7 @@
+/**
+ * @file datastructures.h
+ * @brief Implements all the datastructures used in libmix
+ */
 #ifndef DATASTRUCTURES_H
 #define DATASTRUCTURES_H
 

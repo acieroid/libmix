@@ -5,9 +5,16 @@
 #ifndef MIX_UTILS_H
 #define MIX_UTILS_H
 
+/**
+ * Print a warning
+ */
 #define MIX_WARN(...)                                   \
   fprintf(stderr, "[libmix] Warning: " __VA_ARGS__);    \
   fprintf(stderr, "\n");
+
+/**
+ * Print a debug message
+ */
 #define MIX_DBG(...)                                    \
   fprintf(stderr, "[libmix] Debug: " __VA_ARGS__);      \
   fprintf(stderr, "\n");

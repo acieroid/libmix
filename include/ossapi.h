@@ -13,6 +13,9 @@
  */
 typedef int MixAPIFD;
 
+/**
+ * Call an OSS routine and check if there has been errors during the call
+ */
 #define OSS_CALL(FD, CALL, ARG)                         \
   if (ioctl((FD), (CALL), (ARG)) == -1) {               \
     perror((#CALL));                                    \

@@ -10,6 +10,11 @@
 
 #include "util.h"
 
+/**
+ * Macro to iterate over a list
+ * @param iterator: a MixList * containing the list element at each iteration
+ * @param list: the list over which we want to iterate
+ */
 #define mix_foreach(iterator, list)              \
   for ((iterator) = (list); (iterator) != NULL;  \
        iterator = iterator->next)

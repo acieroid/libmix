@@ -99,4 +99,19 @@ int mix_extension_is_enum(MixExtension *ext);
  */
 int mix_extension_is_stereo(MixExtension *ext);
 
+/**
+ * @return 1 if this extension is writeable
+ */
+int mix_extension_is_writeable(MixExtension *ext)
+
+/**
+ * Set the value of this extension
+ */
+void mix_extension_set_value(MixExtension *ext, int value);
+
+/**
+ * Set the stereo value of this extension
+ */
+void mix_extension_set_stereo_value(MixExtension *ext, int left, int right);
+
 #endif /* MIX_EXTENSION_H */

@@ -264,3 +264,43 @@ int mix_extension_is_stereo(MixExtension *ext)
     return 0;
   }
 }
+
+int mix_extension_is_writeable(MixExtension *ext)
+{
+  assert(ext != NULL);
+  return ext->mixext.flags & MIXF_WRITEABLE;
+}
+
+void mix_extension_set_value(MixExtension *ext, int value)
+{
+  MIX_DBG("Setting the value of extension %s to %d",
+          mix_extension_get_name(ext), value);
+  oss_mixer_value val;
+  assert(ext != NULL);
+
+  if (!mix_extension_is_writeable(ext)) {
+    MIX_WARN("Trying to modify a read-only extension: %s",
+             mix_extension_get_name(ext));
+    return;
+  }
+  
+  val.dev = ext->mixext.dev;
+  val.ctrl = ext->mixext.ctrl;
+  val.timestamp = ext->mixext.timestamp;
+  val.value = value;
+  OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_WRITE, &val);
+}
+
+void mix_extension_set_stereo_value(MixExtension *ext, int left, int right)
+{
+  int shift;
+  switch (mix_extension_get_type(ext)) {
+  case MIXT_STEREOSLIDER16:
+    shift = 16;
+    break;
+  default:
+    shift = 8;
+    break;
+  }
+  mix_extension_set_value(ext, left | (right << shift));
+}

@@ -8,7 +8,7 @@ if debug == '1':
     cflags += '-g '
 cflags += '-Iinclude -I' + oss_include_dir + ' '
 
-examples = ['open_dev.c', 'list_mixers.c']
+examples = ['open_dev.c', 'list_mixers.c', 'ossvol.c']
 
 for example in examples:
     env.Program(example, CFLAGS=cflags, LIBS=['mix'], LIBPATH='../src')

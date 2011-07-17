@@ -76,3 +76,24 @@ void mix_mixer_add_child_extension(MixMixer *mixer, MixExtension *ext)
   mixer->extensions = mix_list_prepend(mixer->extensions, ext);
   mix_extension_set_parent_mixer(ext, mixer);
 }
+
+MixExtension *mix_mixer_find_extension(MixMixer *mixer, const char *name)
+{
+  MixList *iterator;
+  MixExtension *ext;
+  MixGroup *group;
+  mix_foreach(iterator, mix_mixer_get_extensions(mixer)) {
+    ext = iterator->data;
+    if (strcmp(mix_extension_get_name(ext), name) == 0)
+      return ext;
+  }
+
+  mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
+    group = iterator->data;
+    ext = mix_group_find_extension(group, name);
+    if (ext != NULL)
+      return ext;
+  }
+  MIX_WARN("No extensions found when searching for %s", name);
+  return NULL;
+}

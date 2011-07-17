@@ -108,3 +108,23 @@ void mix_group_set_parent_group(MixGroup *group, MixGroup *parent)
   assert(group != NULL);
   group->parent_group = parent;
 }
+
+MixExtension *mix_group_find_extension(MixGroup *group, const char *name)
+{
+  MixList *iterator;
+  MixExtension *ext;
+  MixGroup *child_group;
+  mix_foreach(iterator, mix_group_get_extensions(group)) {
+    ext = iterator->data;
+    if (strcmp(mix_extension_get_name(ext), name) == 0)
+      return ext;
+  }
+
+  mix_foreach(iterator, mix_group_get_groups(group)) {
+    child_group = iterator->data;
+    ext = mix_group_find_extension(child_group, name);
+    if (ext != NULL)
+      return ext;
+  }
+  return NULL;
+}

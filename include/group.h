@@ -71,4 +71,10 @@ void mix_group_set_parent_mixer(MixGroup *group, MixMixer *mixer);
  */
 void mix_group_set_parent_group(MixGroup *group, MixGroup *parent);
 
+/**
+ * @return the extension that match the name given as argument, or
+ * NULL
+ */
+MixExtension *mix_group_find_extension(MixGroup *group, const char *name);
+
 #endif /* MIX_GROUP_H */

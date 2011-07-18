@@ -45,6 +45,11 @@ MixMixer *mix_group_get_mixer(MixGroup *group);
 MixAPIFD mix_group_get_fd(MixGroup *group);
 
 /**
+ * Update all this extensions and groups of this group
+ */
+void mix_group_update(MixGroup *group);
+
+/**
  * @sa mix_mixer_finish_add
  */
 void mix_group_finish_add(MixGroup *group);

@@ -46,6 +46,11 @@ int mix_mixer_get_card_number(MixMixer *mixer);
 MixAPIFD mix_mixer_get_fd(MixMixer *mixer);
 
 /**
+ * update all the extensions and groups of this mixer
+ */
+void mix_mixer_update(MixMixer *mixer);
+
+/**
  * Function to call when all groups and extensions have been added. It
  * takes care of reversing them to have them in order.
  */

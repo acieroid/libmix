@@ -66,6 +66,12 @@ MixAPIFD mix_group_get_fd(MixGroup *group)
     return mix_group_get_fd(parent_group);
 }
 
+void mix_group_update(MixGroup *group)
+{
+  mix_list_iter(group->groups, (MixIterFunc) mix_group_update);
+  mix_list_iter(group->extensions, (MixIterFunc) mix_extension_update_value);
+}
+
 void mix_group_finish_add(MixGroup *group)
 {
   assert(group != NULL);

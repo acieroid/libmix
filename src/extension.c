@@ -291,7 +291,7 @@ void mix_extension_set_value(MixExtension *ext, int value)
   OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_WRITE, &val);
 
   /* we now have to update the value since it was changed */
-  oss_extension_update_value(ext);
+  mix_extension_update_value(ext);
 }
 
 void mix_extension_set_stereo_value(MixExtension *ext, int left, int right)

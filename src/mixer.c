@@ -53,6 +53,12 @@ MixAPIFD mix_mixer_get_fd(MixMixer *mixer)
   return mixer->fd;
 }
 
+void mix_mixer_update(MixMixer *mixer)
+{
+  mix_list_iter(mixer->groups, (MixIterFunc) mix_group_update);
+  mix_list_iter(mixer->extensions, (MixIterFunc) mix_extension_update_value);
+}
+
 void mix_mixer_finish_add(MixMixer *mixer)
 {
   mixer->groups = mix_list_reverse(mixer->groups);

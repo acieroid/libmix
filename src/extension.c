@@ -281,6 +281,20 @@ int mix_extension_is_mute(MixExtension *ext)
   }
 }
 
+int mix_extension_is_slider(MixExtension *ext)
+{
+  switch (mix_extension_get_type(ext)) {
+  case MIXT_STEREOSLIDER16:
+  case MIXT_SLIDER:
+  case MIXT_MONOSLIDER16:
+  case MIXT_STEREOSLIDER:
+  case MIXT_MONOSLIDER:
+    return 1;
+  default:
+    return 0;
+  }
+}
+
 int mix_extension_is_writeable(MixExtension *ext)
 {
   assert(ext != NULL);

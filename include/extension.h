@@ -109,6 +109,11 @@ int mix_extension_is_stereo(MixExtension *ext);
 int mix_extension_is_mute(MixExtension *ext);
 
 /**
+ * @return 1 if this extension is a slider
+ */
+int mix_extension_is_slider(MixExtension *ext);
+
+/**
  * @return 1 if this extension is writeable
  */
 int mix_extension_is_writeable(MixExtension *ext);

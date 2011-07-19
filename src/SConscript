@@ -5,7 +5,7 @@ cflags = ARGUMENTS.get('CFLAGS', '')
 oss_include_dir = ARGUMENTS.get('OSS_INCLUDE_DIR', '/usr/local/lib/oss/include')
 
 if debug == '1':
-    cflags += '-g '
+    cflags += '-g -DDEBUG '
 cflags += '-Iinclude -I' + oss_include_dir + ' '
 
 sources = ['list.c', 'color.c', 'util.c',

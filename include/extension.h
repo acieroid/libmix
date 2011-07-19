@@ -62,6 +62,11 @@ int mix_extension_get_left_value(MixExtension *ext);
 int mix_extension_get_right_value(MixExtension *ext);
 
 /**
+ * @return 1 is the extension is muted and 0 if not
+ */
+int mix_extension_muted(MixExtension *ext);
+
+/**
  * @return the maximum value of the mixer
  */
 int mix_extension_get_max_value(MixExtension *ext);
@@ -97,6 +102,11 @@ int mix_extension_is_enum(MixExtension *ext);
  * @return 1 if this extension's values are stereo
  */
 int mix_extension_is_stereo(MixExtension *ext);
+
+/**
+ * @return 1 if this extension is a mute or on/off extension
+ */
+int mix_extension_is_mute(MixExtension *ext);
 
 /**
  * @return 1 if this extension is writeable

@@ -15,9 +15,13 @@
 /**
  * Print a debug message
  */
+#ifdef DEBUG
 #define MIX_DBG(...)                                    \
   fprintf(stderr, "[libmix] Debug: " __VA_ARGS__);      \
   fprintf(stderr, "\n");
+#else
+#define MIX_DBG(...) ;
+#endif
 
 /**
  * A function used to free data

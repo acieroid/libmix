@@ -196,6 +196,11 @@ int mix_extension_get_right_value(MixExtension *ext)
   return mix_extension_get_value(ext) & mask;
 }
 
+int mix_extension_muted(MixExtension *ext)
+{
+  return mix_extension_get_value(ext);
+}
+
 int mix_extension_get_max_value(MixExtension *ext)
 {
   assert(ext != NULL);
@@ -259,6 +264,17 @@ int mix_extension_is_stereo(MixExtension *ext)
   switch (mix_extension_get_type(ext)) {
   case MIXT_STEREOSLIDER:
   case MIXT_STEREOSLIDER16:
+    return 1;
+  default:
+    return 0;
+  }
+}
+
+int mix_extension_is_mute(MixExtension *ext)
+{
+  switch (mix_extension_get_type(ext)) {
+  case MIXT_MUTE:
+  case MIXT_ONOFF:
     return 1;
   default:
     return 0;

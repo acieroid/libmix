@@ -128,4 +128,9 @@ void mix_extension_set_value(MixExtension *ext, int value);
  */
 void mix_extension_set_stereo_value(MixExtension *ext, int left, int right);
 
+/**
+ * Set the muted value of this extension (1 = muted, 0 = unmuted)
+ */
+void mix_extension_set_muted(MixExtension *ext, int muted);
+
 #endif /* MIX_EXTENSION_H */

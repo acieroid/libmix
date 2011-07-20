@@ -103,3 +103,21 @@ MixExtension *mix_mixer_find_extension(MixMixer *mixer, const char *name)
   MIX_WARN("No extensions found when searching for %s", name);
   return NULL;
 }
+
+MixGroup *mix_mixer_find_group(MixMixer *mixer, const char *name)
+{
+  MixList *iterator;
+  MixGroup *group, *child_group;
+
+  mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
+    group = iterator->data;
+    if (strcmp(mix_group_get_name(group), name) == 0)
+      return group;
+
+    child_group = mix_group_find_group(group, name);
+    if (child_group != NULL)
+      return child_group;
+  }
+  MIX_WARN("No group found when searching for %s", name);
+  return NULL;
+}

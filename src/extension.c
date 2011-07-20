@@ -337,3 +337,9 @@ void mix_extension_set_stereo_value(MixExtension *ext, int left, int right)
   }
   mix_extension_set_value(ext, left | (right << shift));
 }
+
+void mix_extension_set_muted(MixExtension *ext, int muted)
+{
+  assert(muted == 0 || muted == 1);
+  mix_extension_set_value(ext, muted);
+}

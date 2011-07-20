@@ -134,3 +134,20 @@ MixExtension *mix_group_find_extension(MixGroup *group, const char *name)
   }
   return NULL;
 }
+
+MixGroup *mix_group_find_group(MixGroup *group, const char *name)
+{
+  MixList *iterator;
+  MixGroup *child_group, *child_child_group;
+
+  mix_foreach(iterator, mix_group_get_groups(group)) {
+    child_group = iterator->data;
+    if (strcmp(mix_group_get_name(child_group), name) == 0)
+      return child_group;
+
+    child_child_group = mix_group_find_group(child_group, name);
+    if (child_child_group != NULL)
+      return child_child_group;
+  }
+  return NULL;
+}

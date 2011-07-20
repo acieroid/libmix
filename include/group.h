@@ -81,5 +81,9 @@ void mix_group_set_parent_group(MixGroup *group, MixGroup *parent);
  * NULL
  */
 MixExtension *mix_group_find_extension(MixGroup *group, const char *name);
+/**
+ * @return the group that match the name given as argument, or NULL
+ */
+MixGroup *mix_group_find_group(MixGroup *group, const char *name);
 
 #endif /* MIX_GROUP_H */

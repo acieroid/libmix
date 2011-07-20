@@ -5,8 +5,10 @@
 
 MixGroup *mix_group_new(oss_mixext ext)
 {
+  MixGroup *group;
   MIX_DBG("Creating group %s", ext.extname);
-  MixGroup *group = malloc(sizeof(*group));
+
+  group = malloc(sizeof(*group));
   assert(group != NULL);
   group->parent_mixer = NULL;
   group->parent_group = NULL;
@@ -18,8 +20,9 @@ MixGroup *mix_group_new(oss_mixext ext)
 
 void mix_group_free(MixGroup *group)
 {
-  MIX_DBG("Freeing group %s", mix_group_get_name(group));
   assert(group != NULL);
+  MIX_DBG("Freeing group %s", mix_group_get_name(group));
+
   mix_list_free(group->extensions, (MixFreeFunc) mix_extension_free);
   mix_list_free(group->groups, (MixFreeFunc) mix_group_free);
   free(group);
@@ -57,8 +60,11 @@ MixGroup *mix_group_get_group(MixGroup *group)
 
 MixAPIFD mix_group_get_fd(MixGroup *group)
 {
-  MixMixer *parent_mixer = mix_group_get_mixer(group);
-  MixGroup *parent_group = mix_group_get_group(group);
+  MixMixer *parent_mixer;
+  MixGroup *parent_group;
+  parent_mixer = mix_group_get_mixer(group);
+  parent_group = mix_group_get_group(group);
+
   assert(parent_group != NULL || parent_mixer != NULL);
   if (parent_mixer != NULL)
     return mix_mixer_get_fd(parent_mixer);
@@ -86,6 +92,7 @@ void mix_group_add_child_group(MixGroup *group, MixGroup *child)
   MIX_DBG("Group %s: adding group %s",
           mix_group_get_name(group), mix_group_get_name(child));
   assert(group != NULL);
+
   group->groups = mix_list_prepend(group->groups, child);
   mix_group_set_parent_group(child, group);
 }
@@ -95,6 +102,7 @@ void mix_group_add_child_extension(MixGroup *group, MixExtension *ext)
   MIX_DBG("Group %s: adding extension %s",
           mix_group_get_name(group), mix_extension_get_name(ext));
   assert(group != NULL);
+
   group->extensions = mix_list_prepend(group->extensions, ext);
   mix_extension_set_parent_group(ext, group);
 }
@@ -104,6 +112,7 @@ void mix_group_set_parent_mixer(MixGroup *group, MixMixer *mixer)
   MIX_DBG("Group %s: setting parent mixer %s",
           mix_group_get_name(group), mix_mixer_get_name(mixer));
   assert(group != NULL);
+
   group->parent_mixer = mixer;
 }
 
@@ -112,6 +121,7 @@ void mix_group_set_parent_group(MixGroup *group, MixGroup *parent)
   MIX_DBG("Group %s: setting parent group %s",
           mix_group_get_name(group), mix_group_get_name(parent));
   assert(group != NULL);
+
   group->parent_group = parent;
 }
 

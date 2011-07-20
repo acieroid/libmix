@@ -4,8 +4,8 @@
 
 MixExtension *mix_extension_new(oss_mixext ext)
 {
-  MIX_DBG("Creating extension %s", ext.extname);
   MixExtension *extension = malloc(sizeof(*extension));
+  MIX_DBG("Creating extension %s", ext.extname);
   assert(extension != NULL);
 
   extension->parent_group = NULL;
@@ -24,9 +24,9 @@ MixExtension *mix_extension_new(oss_mixext ext)
 
 void mix_extension_free(MixExtension *ext)
 {
-  MIX_DBG("Freeing extension %s", mix_extension_get_name(ext));
   int i;
   assert(ext != NULL);
+  MIX_DBG("Freeing extension %s", mix_extension_get_name(ext));
 
   if (ext->color != NULL)
     mix_color_free(ext->color);
@@ -45,11 +45,13 @@ void mix_extension_free(MixExtension *ext)
 
 void mix_extension_update_value(MixExtension *ext)
 {
-  MIX_DBG("Extension %s: updating value",
-          mix_extension_get_name(ext));
   int i, mask;
   oss_mixer_value val;
   oss_mixer_enuminfo enuminfo;
+
+  MIX_DBG("Extension %s: updating value",
+          mix_extension_get_name(ext));
+
   /* The dev, ctrl and timestamp fields must be initialized to the
      values returned by SNDCTL_MIX_EXTINFO before making the
      call. (OSS documentation) */
@@ -221,8 +223,11 @@ int mix_extension_get_type(MixExtension *ext)
 
 MixAPIFD mix_extension_get_fd(MixExtension *ext)
 {
-  MixMixer *parent_mixer = mix_extension_get_mixer(ext);
-  MixGroup *parent_group = mix_extension_get_group(ext);
+  MixMixer *parent_mixer;
+  MixGroup *parent_group;
+  parent_mixer = mix_extension_get_mixer(ext);
+  parent_group  = mix_extension_get_group(ext);
+
   assert(parent_group != NULL || parent_mixer != NULL);
   if (parent_mixer != NULL)
     return mix_mixer_get_fd(parent_mixer);
@@ -234,23 +239,24 @@ char *mix_extension_get_enum_value(MixExtension *ext)
 {
   assert(ext != NULL);
   assert(mix_extension_get_type(ext) == MIXT_ENUM);
-  //  if (mix_extension_get_value() > mix_extension_get_max_value())
   return ext->enum_values[ext->value];
 }
 
 void mix_extension_set_parent_mixer(MixExtension *ext, MixMixer *mixer)
 {
+  assert(ext != NULL);
   MIX_DBG("Extension %s: setting parent mixer %s",
           mix_extension_get_name(ext), mix_mixer_get_name(mixer));
-  assert(ext != NULL);
+
   ext->parent_mixer = mixer;
 }
 
 void mix_extension_set_parent_group(MixExtension *ext, MixGroup *group)
 {
+  assert(ext != NULL);
   MIX_DBG("Extension %s: setting parent group %s",
           mix_extension_get_name(ext), mix_group_get_name(group));
-  assert(ext != NULL);
+
   ext->parent_group = group;
 }
 
@@ -303,10 +309,11 @@ int mix_extension_is_writeable(MixExtension *ext)
 
 void mix_extension_set_value(MixExtension *ext, int value)
 {
-  MIX_DBG("Setting the value of extension %s to %d",
-          mix_extension_get_name(ext), value);
   oss_mixer_value val;
   assert(ext != NULL);
+  MIX_DBG("Setting the value of extension %s to %d",
+          mix_extension_get_name(ext), value);
+
 
   if (!mix_extension_is_writeable(ext)) {
     MIX_WARN("Trying to modify a read-only extension: %s",

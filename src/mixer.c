@@ -4,8 +4,9 @@
 
 MixMixer *mix_mixer_new(MixAPIFD fd)
 {
-  MIX_DBG("Creating mixer");
   MixMixer *mixer = malloc(sizeof(*mixer));
+  MIX_DBG("Creating mixer");
+
   assert(mixer != NULL);
 
   mixer->fd = fd;
@@ -17,8 +18,8 @@ MixMixer *mix_mixer_new(MixAPIFD fd)
 
 void mix_mixer_free(MixMixer *mixer)
 {
-  MIX_DBG("Freeing mixer %s", mix_mixer_get_name(mixer));
   assert(mixer != NULL);
+  MIX_DBG("Freeing mixer %s", mix_mixer_get_name(mixer));
   mix_list_free(mixer->groups, (MixFreeFunc) mix_group_free);
   mix_list_free(mixer->extensions, (MixFreeFunc) mix_extension_free);
   free(mixer);
@@ -88,6 +89,7 @@ MixExtension *mix_mixer_find_extension(MixMixer *mixer, const char *name)
   MixList *iterator;
   MixExtension *ext;
   MixGroup *group;
+
   mix_foreach(iterator, mix_mixer_get_extensions(mixer)) {
     ext = iterator->data;
     if (strcmp(mix_extension_get_name(ext), name) == 0)

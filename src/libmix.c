@@ -96,6 +96,7 @@ MixList *mix_get_mixers(MixAPIFD fd)
   
   for (i = 0; i < n; i++)
     result = mix_list_prepend(result, (void *) mix_get_mixer(fd, i));
-  
+
+  result = mix_list_reverse(result);
   return result;
 }

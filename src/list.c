@@ -65,7 +65,7 @@ void mix_list_iter(MixList *list, MixIterFunc iterfunc)
 void *mix_list_select_left(MixList *list, void *selected)
 {
   MixList *iterator;
-  void *prev;
+  void *prev = NULL;
   mix_foreach(iterator, list) {
     if (iterator->data == selected) {
       if (prev == NULL)

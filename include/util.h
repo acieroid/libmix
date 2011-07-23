@@ -5,6 +5,8 @@
 #ifndef MIX_UTILS_H
 #define MIX_UTILS_H
 
+#include <stdio.h>
+
 /**
  * Print a warning
  */

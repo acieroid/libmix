@@ -56,4 +56,14 @@ void mix_list_free(MixList *list, MixFreeFunc freefunc);
  */
 void mix_list_iter(MixList *list, MixIterFunc iterfunc);
 
+/**
+ * Find @p selected in the list and return the element at his left
+ */
+void *mix_list_select_left(MixList *list, void *selected);
+
+/**
+ * Find @p selected in the list and return the element at his right
+ */
+void *mix_list_select_right(MixList *list, void *selected);
+
 #endif /* MIX_LIST_H */

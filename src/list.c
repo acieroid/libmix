@@ -61,3 +61,35 @@ void mix_list_iter(MixList *list, MixIterFunc iterfunc)
     iterfunc(iterator->data);
   }
 }
+
+void *mix_list_select_left(MixList *list, void *selected)
+{
+  MixList *iterator;
+  void *prev;
+  mix_foreach(iterator, list) {
+    if (iterator->data == selected) {
+      if (prev == NULL)
+        return selected; /* already at the left-most element */
+      else
+        return prev;
+    }
+    prev = iterator->data;
+  }
+  MIX_WARN("No elements found when selecting left");
+  return NULL;
+}
+
+void *mix_list_select_right(MixList *list, void *selected)
+{
+  MixList *iterator;
+  mix_foreach(iterator, list) {
+    if (iterator->data == selected) {
+      if (iterator->next == NULL)
+        return selected; /* already at the right-most element */
+      else
+        return iterator->next->data;
+    }
+  }
+  MIX_WARN("No elements found when selecting right");
+  return NULL;
+}

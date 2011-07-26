@@ -7,5 +7,7 @@ sources = ['list.c', 'color.c', 'util.c',
 libmix = env.SharedLibrary(target = 'mix', source = sources,
                            CFLAGS = cflags)
 
-env.Install(destdir, libmix)
-env.Alias('install', destdir)
+libdir = destdir + '/lib/'
+env.Install(libdir, libmix)
+env.Alias('install', libdir)
+

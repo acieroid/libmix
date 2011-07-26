@@ -1,0 +1,9 @@
+Import('env', 'destdir')
+
+includes = ['color.h', 'datastructures.h', 'extension.h',
+            'group.h', 'libmix.h', 'list.h', 'mixer.h',
+            'ossapi.h', 'util.h']
+includedir = destdir + '/include/libmix/'
+
+env.Install(includedir, includes)
+env.Alias('install', includedir)

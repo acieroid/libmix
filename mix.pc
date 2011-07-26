@@ -1,0 +1,13 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=/usr/local/lib
+includedir=/usr/local/include
+
+Name: mix
+Description: OSS 4 Mixer library
+Requires:
+Requires.private:
+Version: 0.1
+Libs: -L${libdir} -lmix
+Libs.private:
+Cflags: -I${includedir}

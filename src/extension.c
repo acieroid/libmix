@@ -183,19 +183,22 @@ int mix_extension_get_left_value(MixExtension *ext)
 
 int mix_extension_get_right_value(MixExtension *ext)
 {
-  int mask;
+  int mask, shift;
   switch (mix_extension_get_type(ext)) {
   case MIXT_STEREOSLIDER: /* 0xRRLL */
-    mask = 0xFF00 >> 8;
+    mask = 0xFF00;
+    shift = 8;
     break;
   case MIXT_STEREOSLIDER16: /* 0xRRRRLLLL */
-    mask = 0xFFFF0000 >> 16;
+    mask = 0xFFFF0000;
+    shift = 16;
     break;
   default:
     MIX_WARN("Extension %s isn't stereo", mix_extension_get_name(ext));
     mask = ~0; /* We simply return its raw value */
+    shift = 0;
   }
-  return mix_extension_get_value(ext) & mask;
+  return (mix_extension_get_value(ext) & mask) >> shift;
 }
 
 int mix_extension_muted(MixExtension *ext)

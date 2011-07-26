@@ -1,0 +1,13 @@
+libmix is an OSS 4 mixer library
+
+* Compilation and installation
+To compile and install libmix you should have SCons installed, and
+run =scons install=. You can adapt the variales =OSS_INCLUDE_DIR=
+(=/usr/local/lib/oss/include/= by default, but might also be
+=/usr/lib/oss/include=), =DEBUG= (defaults to 0) and =DESTDIR=
+(defaults to =/usr/local/=).
+
+* Usage
+Look at the examples in the =examples= directory to see how to use
+libmix
+

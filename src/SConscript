@@ -1,16 +1,11 @@
-env = Environment()
-
-debug = ARGUMENTS.get('DEBUG', '1')
-cflags = ARGUMENTS.get('CFLAGS', '')
-oss_include_dir = ARGUMENTS.get('OSS_INCLUDE_DIR', '/usr/local/lib/oss/include')
-
-cflags += ' '
-if debug == '1':
-    cflags += '-g -DDEBUG '
-cflags += '-Iinclude -I' + oss_include_dir + ' '
+Import('env', 'debug', 'cflags', 'destdir')
 
 sources = ['list.c', 'color.c', 'util.c',
            'group.c', 'extension.c', 'mixer.c',
            'libmix.c']
+
 libmix = env.SharedLibrary(target = 'mix', source = sources,
                            CFLAGS = cflags)
+
+env.Install(destdir, libmix)
+env.Alias('install', destdir)

@@ -240,9 +240,13 @@ MixAPIFD mix_extension_get_fd(MixExtension *ext)
 
 char *mix_extension_get_enum_value(MixExtension *ext)
 {
+  int val;
   assert(ext != NULL);
   assert(mix_extension_get_type(ext) == MIXT_ENUM);
-  return ext->enum_values[ext->value];
+  val = mix_extension_get_value(ext);
+  if (val > mix_extension_max_value(ext))
+    val = mix_extension_get_max_value(ext);
+  return ext->enum_values[val];
 }
 
 char **mix_extension_get_enum_values(MixExtension *ext)

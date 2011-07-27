@@ -5,7 +5,7 @@
 MixExtension *mix_extension_new(oss_mixext ext)
 {
   MixExtension *extension = malloc(sizeof(*extension));
-  MIX_DBG("Creating extension %s", ext.extname);
+  MIX_DBG("Creating extension %s of type %d", ext.extname, ext.type);
   assert(extension != NULL);
 
   extension->parent_group = NULL;
@@ -131,6 +131,8 @@ void mix_extension_update_value(MixExtension *ext)
              mix_extension_get_type(ext), mix_extension_get_name(ext));
     break;
   }
+  MIX_DBG("Extension %s value has been updated to %d",
+          mix_extension_get_name(ext), ext->value);
 }
 
 char *mix_extension_get_name(MixExtension *ext)
@@ -160,6 +162,8 @@ MixColor *mix_extension_get_color(MixExtension *ext)
 int mix_extension_get_value(MixExtension *ext)
 {
   assert(ext != NULL);
+  MIX_DBG("Getting extension %s value, which is %d",
+          mix_extension_get_name(ext), ext->value);
   return ext->value;
 }
 
@@ -178,6 +182,9 @@ int mix_extension_get_left_value(MixExtension *ext)
     mask = ~0; /* We simply return its raw value */
     break;
   }
+  MIX_DBG("Getting extension %s left value, which is %d",
+          mix_extension_get_name(ext),
+          (mix_extension_get_value(ext) & mask));
   return mix_extension_get_value(ext) & mask;
 }
 
@@ -198,6 +205,9 @@ int mix_extension_get_right_value(MixExtension *ext)
     mask = ~0; /* We simply return its raw value */
     shift = 0;
   }
+  MIX_DBG("Getting extension %s right value, which is %d",
+          mix_extension_get_name(ext),
+          (mix_extension_get_value(ext) & mask) >> shift);
   return (mix_extension_get_value(ext) & mask) >> shift;
 }
 
@@ -346,7 +356,8 @@ void mix_extension_set_value(MixExtension *ext, int value)
   val.dev = ext->mixext.dev;
   val.ctrl = ext->mixext.ctrl;
   val.timestamp = ext->mixext.timestamp;
-  if (value < mix_extension_get_max_value(ext))
+  if (value < mix_extension_get_max_value(ext) ||
+      mix_extension_is_stereo(ext))
     val.value = value;
   else
     val.value = mix_extension_get_max_value(ext)-1;
@@ -358,6 +369,8 @@ void mix_extension_set_value(MixExtension *ext, int value)
 
 void mix_extension_set_stereo_value(MixExtension *ext, int left, int right)
 {
+  MIX_DBG("Setting the stereo value of extension %s to %d:%d",
+          mix_extension_get_name(ext), left, right);
   int shift;
   switch (mix_extension_get_type(ext)) {
   case MIXT_STEREOSLIDER16:

@@ -245,7 +245,7 @@ char *mix_extension_get_enum_value(MixExtension *ext)
   assert(mix_extension_get_type(ext) == MIXT_ENUM);
   val = mix_extension_get_value(ext);
   if (val > mix_extension_get_max_value(ext))
-    val = mix_extension_get_max_value(ext);
+    val = mix_extension_get_max_value(ext)-1;
   return ext->enum_values[val];
 }
 
@@ -337,7 +337,6 @@ void mix_extension_set_value(MixExtension *ext, int value)
   MIX_DBG("Setting the value of extension %s to %d",
           mix_extension_get_name(ext), value);
 
-
   if (!mix_extension_is_writeable(ext)) {
     MIX_WARN("Trying to modify a read-only extension: %s",
              mix_extension_get_name(ext));
@@ -347,7 +346,10 @@ void mix_extension_set_value(MixExtension *ext, int value)
   val.dev = ext->mixext.dev;
   val.ctrl = ext->mixext.ctrl;
   val.timestamp = ext->mixext.timestamp;
-  val.value = value;
+  if (value < mix_extension_get_max_value(ext))
+    val.value = value;
+  else
+    val.value = mix_extension_get_max_value(ext)-1;
   OSS_CALL(mix_extension_get_fd(ext), SNDCTL_MIX_WRITE, &val);
 
   /* we now have to update the value since it was changed */

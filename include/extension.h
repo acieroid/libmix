@@ -94,6 +94,11 @@ MixAPIFD mix_extension_get_fd(MixExtension *ext);
 char *mix_extension_get_enum_value(MixExtension *ext);
 
 /**
+ * @return the array of the enum values
+ */
+char **mix_extension_get_enum_values(MixExtension *ext);
+
+/**
  * @return 1 if this extension is an enum (MIXT_ENUM)
  */
 int mix_extension_is_enum(MixExtension *ext);
@@ -117,6 +122,11 @@ int mix_extension_is_slider(MixExtension *ext);
  * @return 1 if this extension is writeable
  */
 int mix_extension_is_writeable(MixExtension *ext);
+
+/**
+ * @return 1 if the enum value @p val is available
+ */
+int mix_extension_enum_value_is_available(MixExtension *ext, int val);
 
 /**
  * Set the value of this extension

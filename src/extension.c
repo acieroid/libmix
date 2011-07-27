@@ -245,6 +245,13 @@ char *mix_extension_get_enum_value(MixExtension *ext)
   return ext->enum_values[ext->value];
 }
 
+char **mix_extension_get_enum_values(MixExtension *ext)
+{
+  assert(ext != NULL);
+  assert(mix_extension_get_type(ext) == MIXT_ENUM);
+  return ext->enum_values;
+}
+
 void mix_extension_set_parent_mixer(MixExtension *ext, MixMixer *mixer)
 {
   assert(ext != NULL);
@@ -308,6 +315,15 @@ int mix_extension_is_writeable(MixExtension *ext)
 {
   assert(ext != NULL);
   return ext->mixext.flags & MIXF_WRITEABLE;
+}
+
+int mix_extension_enum_value_is_available(MixExtension *ext, int val)
+{
+  assert(ext != NULL);
+  if (val < mix_extension_get_max_value(ext))
+    return ext->enum_values_available[val];
+  else
+    return 0;
 }
 
 void mix_extension_set_value(MixExtension *ext, int value)

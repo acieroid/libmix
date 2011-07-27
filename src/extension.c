@@ -244,7 +244,7 @@ char *mix_extension_get_enum_value(MixExtension *ext)
   assert(ext != NULL);
   assert(mix_extension_get_type(ext) == MIXT_ENUM);
   val = mix_extension_get_value(ext);
-  if (val > mix_extension_max_value(ext))
+  if (val > mix_extension_get_max_value(ext))
     val = mix_extension_get_max_value(ext);
   return ext->enum_values[val];
 }
